@@ -10,12 +10,12 @@ func _ready() -> void:
 	load_text_from_file("res://test/text2.txt")
 	text += "[/bgcolor][/color]"
 	text += "       "
-	text += "[color=#%s]" % G.CGA_PALETTE[G.CGA.CYAN].to_html(false)
-	text += "[bgcolor=#%s]" % G.CGA_PALETTE[G.CGA.BLUE].to_html(false)
+	text += "[bgcolor=#%s]" % G.CGA_PALETTE[G.CGA.BLACK].to_html(false)
+	text += "[color=#%s]" % G.CGA_PALETTE[G.CGA.WHITE].to_html(false)
 	text += String.chr(G.DOS_ANSI_CHARACTERS_DECIMAL["F1"])
-	text += "[bgcolor=#%s]" % G.CGA_PALETTE[G.CGA.CYAN].to_html(false)
-	text += "[color=#%s]" % G.CGA_PALETTE[G.CGA.BLUE].to_html(false)
-	text += String.chr(G.DOS_ANSI_CHARACTERS_DECIMAL["F3"])
+	text += "[color=#%s]" % G.CGA_PALETTE[G.CGA.WHITE].to_html(false)
+	text += "[bgcolor=#%s]" % G.CGA_PALETTE[G.CGA.BLACK].to_html(false)
+	text += String.chr(G.DOS_ANSI_CHARACTERS_DECIMAL["F1"])
 
 func load_text_from_file(path: String):
 	var character
