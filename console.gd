@@ -4,7 +4,10 @@ func _ready() -> void:
 	#for char in GLOBAL.DOS_ANSI_CHARACTERS_DECIMAL:
 		#text += String.chr(GLOBAL.DOS_ANSI_CHARACTERS_DECIMAL[char])
 		#print("%x" % GLOBAL.DOS_ANSI_CHARACTERS_DECIMAL[char])
+	text = "[color=#%s]" % G.CGA_PALETTE[G.CGA.CYAN].to_html(false)
 	load_text_from_file("res://test/text2.txt")
+	text += "[/color]"
+
 
 func load_text_from_file(path: String):
 	var char

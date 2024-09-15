@@ -1,5 +1,43 @@
 extends Node
 
+enum CGA {
+	BLACK,
+	BLUE,
+	GREEN,
+	CYAN,
+	RED,
+	MAGENTA,
+	BROWN,
+	WHITE,
+	GRAY,
+	BRIGHT_BLUE,
+	BRIGHT_GREEN,
+	BRIGHT_CYAN,
+	BRIGHT_RED,
+	BRIGHT_MAGENTA,
+	BRIGHT_BROWN,
+	BRIGHT_WHITE
+}
+
+var CGA_PALETTE = [
+	Color(0, 0, 0),			# BLACK
+	Color(0, 0, 170),		# BLUE
+	Color(0, 170, 0),		# GREEN
+	Color(0, 170, 170),		# CYAN
+	Color(170, 0, 0),		# RED
+	Color(170, 0, 170),		# MAGENTA
+	Color(170, 85, 0),		# BROWN
+	Color(170, 170, 170),	# WHITE
+	Color(85, 85, 85),		# GRAY
+	Color(85, 85, 255),		# BRIGHT BLUE
+	Color(85, 255, 85),		# BRIGHT GREEN
+	Color(85, 255, 255),		# BRIGHT CYAN
+	Color(255, 85, 85),		# BRIGHT RED
+	Color(255, 85, 255),		# BRIGHT MAGENTA
+	Color(255, 255, 85),		# BRIGHT BROWN
+	Color(255, 255, 255)		# BRIGHT WHITE
+]
+
 var DOS_ANSI_CHARACTERS_DECIMAL = {
 	"F1": 176,	# ░
 	"F2": 177,	# ▒

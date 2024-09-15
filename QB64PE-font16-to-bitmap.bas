@@ -1,0 +1,36 @@
+' Renders a bitmap font of the _FONT 16 used in QB64 PE
+CONST ROWS=8
+CONST COLS=32
+
+CONST CHAR_W=8
+CONST CHAR_H=16
+
+CONST GRID_W=9
+CONST GRID_H=17
+
+DIM AS LONG f, w, h, CANVAS
+
+_FONT 16
+
+w& = COLS * GRID_W
+h& = ROWS * GRID_H
+
+CANVAS& = _NEWIMAGE(w&, h&, 32)
+SCREEN CANVAS&
+_DEST CANVAS&
+
+DIM AS INTEGER i, x, y
+DIM c AS STRING
+
+_PRINTMODE _KEEPBACKGROUND
+FOR i% = 0 TO 255
+    x% = (i% MOD COLS) * GRID_W
+    y% = (i% \ COLS) * GRID_H
+    c$ = CHR$(i%)
+    _PRINTSTRING (x%, y%), c$
+NEXT
+
+_SAVEIMAGE "Perfect DOS VGA 437_0.png", CANVAS&
+
+SLEEP
+
