@@ -1,5 +1,31 @@
 extends Node
 
+var DOS_ANSI_CHARACTERS_DECIMAL = {
+	"F1": 176,	# ░
+	"F2": 177,	# ▒
+	"F3": 178,	# ▓
+	"F4": 219,	# █
+	"F5": 223,	# ▀
+	"F6": 220,	# ▄
+	"F7": 221,	# ▌
+	"F8": 222,	# ▐
+	"F9": 254,	# ■
+	"F10": 249	# ·
+}
+
+var DOS_ANSI_CHARACTERS_HEX = {
+	"F1": 0x00B0,	# ░
+	"F2": 0x00B1,	# ▒
+	"F3": 0x00B2,	# ▓
+	"F4": 0x00DB,	# █
+	"F5": 0x00DF,	# ▀
+	"F6": 0x00DC,	# ▄
+	"F7": 0x00DD,	# ▌
+	"F8": 0x00DE,	# ▐
+	"F9": 0x00FE,	# ■
+	"F10": 0x00F9	# ·
+}
+
 var UNICODE_ANSI_CHARACTERS_DECIMAL = {
 	"F1": 9617,	# ░
 	"F2": 9618,	# ▒

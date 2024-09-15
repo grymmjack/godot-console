@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://pbkfupf3ckuv"]
 
-[ext_resource type="FontFile" uid="uid://y14wi4most6x" path="res://MorePerfectDOSVGANF-4.ttf" id="1_648cg"]
 [ext_resource type="Script" path="res://console.gd" id="1_boy6p"]
+[ext_resource type="FontFile" uid="uid://b2yywuh283c0w" path="res://Perfect DOS VGA 437_0.png" id="1_d5kih"]
 
 [node name="Node2D" type="Node2D"]
 
@@ -19,19 +19,11 @@ texture_filter = 1
 clip_contents = false
 offset_right = 1024.0
 offset_bottom = 768.0
-theme_override_fonts/normal_font = ExtResource("1_648cg")
-theme_override_fonts/mono_font = ExtResource("1_648cg")
-theme_override_fonts/italics_font = ExtResource("1_648cg")
-theme_override_fonts/bold_italics_font = ExtResource("1_648cg")
-theme_override_fonts/bold_font = ExtResource("1_648cg")
-theme_override_font_sizes/bold_italics_font_size = 16
-theme_override_font_sizes/italics_font_size = 16
-theme_override_font_sizes/mono_font_size = 16
+theme_override_fonts/normal_font = ExtResource("1_d5kih")
+theme_override_fonts/mono_font = ExtResource("1_d5kih")
+theme_override_fonts/italics_font = ExtResource("1_d5kih")
+theme_override_fonts/bold_italics_font = ExtResource("1_d5kih")
+theme_override_fonts/bold_font = ExtResource("1_d5kih")
 theme_override_font_sizes/normal_font_size = 16
-theme_override_font_sizes/bold_font_size = 16
-bbcode_enabled = true
-text = "12345678901234567890123456789012345678901234567890123456789012345678901234567890
-12345678901234567890123456789012345678901234567890123456789012345678901234567890
-12345678901234567890123456789012345678901234567890123456789012345678901234567890"
 scroll_active = false
 script = ExtResource("1_boy6p")
