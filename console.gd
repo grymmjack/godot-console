@@ -1,22 +1,30 @@
 extends RichTextLabel
 
 func _ready() -> void:
-	#for char in GLOBAL.DOS_ANSI_CHARACTERS_DECIMAL:
-		#text += String.chr(GLOBAL.DOS_ANSI_CHARACTERS_DECIMAL[char])
-		#print("%x" % GLOBAL.DOS_ANSI_CHARACTERS_DECIMAL[char])
+	add_theme_constant_override("text_highlight_v_padding", 0)
+	add_theme_constant_override("text_highlight_h_padding", 0)
+	add_theme_constant_override("line_separation", 0)
+	# example bgcolor and color (fg) working!
 	text = "[color=#%s]" % G.CGA_PALETTE[G.CGA.CYAN].to_html(false)
+	text += "[bgcolor=#%s]" % G.CGA_PALETTE[G.CGA.BLUE].to_html(false)
 	load_text_from_file("res://test/text2.txt")
-	text += "[/color]"
-
+	text += "[/bgcolor][/color]"
+	text += "       "
+	text += "[color=#%s]" % G.CGA_PALETTE[G.CGA.CYAN].to_html(false)
+	text += "[bgcolor=#%s]" % G.CGA_PALETTE[G.CGA.BLUE].to_html(false)
+	text += String.chr(G.DOS_ANSI_CHARACTERS_DECIMAL["F1"])
+	text += "[bgcolor=#%s]" % G.CGA_PALETTE[G.CGA.CYAN].to_html(false)
+	text += "[color=#%s]" % G.CGA_PALETTE[G.CGA.BLUE].to_html(false)
+	text += String.chr(G.DOS_ANSI_CHARACTERS_DECIMAL["F3"])
 
 func load_text_from_file(path: String):
-	var char
+	var character
 	if FileAccess.file_exists(path):
 		var file = FileAccess.open(path, FileAccess.ModeFlags.READ)
 		while file.get_position() < file.get_length():
-			char = file.get_8()
-			if char == 13:
+			character = file.get_8()
+			if character == 13:
 				text += " "
 			else:
-				text += String.chr(char)
+				text += String.chr(character)
 		file.close()
