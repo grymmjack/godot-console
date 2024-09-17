@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://pbkfupf3ckuv"]
 
-[ext_resource type="Script" path="res://ARCHIVE/console.gd" id="1_boy6p"]
-[ext_resource type="FontFile" uid="uid://b2yywuh283c0w" path="res://ARCHIVE/Perfect DOS VGA 437_0.png" id="1_d5kih"]
+[ext_resource type="Script" path="res://_/console.gd" id="1_boy6p"]
+[ext_resource type="FontFile" uid="uid://b2yywuh283c0w" path="res://_/Perfect DOS VGA 437_0.png" id="1_d5kih"]
 
 [node name="Node2D" type="Node2D"]
 

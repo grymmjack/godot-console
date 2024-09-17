@@ -12,13 +12,13 @@ config_version=5
 
 config/name="godot-console"
 config/tags=PackedStringArray("git")
-run/main_scene="res://TEXTMODE.tscn"
+run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
-config/icon="res://ARCHIVE/icon.svg"
+config/icon="res://_/icon.svg"
 
 [autoload]
 
-G="*res://_global.gd"
+G="*res://scripts/_global.gd"
 
 [display]
 

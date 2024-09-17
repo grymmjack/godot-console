@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c8s8dcpva20mo"
-path="res://.godot/imported/Perfect DOS VGA 437-9x16-SCALED-3x.png-27c7e53cc1732d7b23d8796d0a6e37b1.ctex"
+path="res://.godot/imported/Perfect DOS VGA 437-9x16-SCALED-3x.png-2a5c91f8264db9b1e3657bb7057eaff5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ARCHIVE/Perfect DOS VGA 437-9x16-SCALED-3x.png"
-dest_files=["res://.godot/imported/Perfect DOS VGA 437-9x16-SCALED-3x.png-27c7e53cc1732d7b23d8796d0a6e37b1.ctex"]
+source_file="res://_/Perfect DOS VGA 437-9x16-SCALED-3x.png"
+dest_files=["res://.godot/imported/Perfect DOS VGA 437-9x16-SCALED-3x.png-2a5c91f8264db9b1e3657bb7057eaff5.ctex"]
 
 [params]
 

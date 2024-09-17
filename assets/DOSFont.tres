@@ -1,10 +1,10 @@
 [gd_resource type="TileSet" load_steps=18 format=3 uid="uid://c3x4bm484vj6k"]
 
-[ext_resource type="Texture2D" uid="uid://h4xflqtauqxu" path="res://Perfect DOS VGA 437_2.png" id="1_lioxf"]
+[ext_resource type="Texture2D" uid="uid://h4xflqtauqxu" path="res://assets/Perfect DOS VGA 437_2.png" id="1_hxlch"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8itbn"]
 resource_name = "BLACK"
-texture = ExtResource("1_lioxf")
+texture = ExtResource("1_hxlch")
 separation = Vector2i(1, 1)
 texture_region_size = Vector2i(8, 16)
 use_texture_padding = false
@@ -523,7 +523,7 @@ use_texture_padding = false
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4tpwb"]
 resource_name = "BLUE"
-texture = ExtResource("1_lioxf")
+texture = ExtResource("1_hxlch")
 separation = Vector2i(1, 1)
 texture_region_size = Vector2i(8, 16)
 1:0/0 = 0
@@ -1037,7 +1037,7 @@ texture_region_size = Vector2i(8, 16)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7qiwu"]
 resource_name = "BRIGHT_GREEN"
-texture = ExtResource("1_lioxf")
+texture = ExtResource("1_hxlch")
 separation = Vector2i(1, 1)
 texture_region_size = Vector2i(8, 16)
 1:0/0 = 0
@@ -1551,7 +1551,7 @@ texture_region_size = Vector2i(8, 16)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_umjtt"]
 resource_name = "BRIGHT_CYAN"
-texture = ExtResource("1_lioxf")
+texture = ExtResource("1_hxlch")
 separation = Vector2i(1, 1)
 texture_region_size = Vector2i(8, 16)
 1:0/0 = 0
@@ -2065,7 +2065,7 @@ texture_region_size = Vector2i(8, 16)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4rv6g"]
 resource_name = "BRIGHT_RED"
-texture = ExtResource("1_lioxf")
+texture = ExtResource("1_hxlch")
 separation = Vector2i(1, 1)
 texture_region_size = Vector2i(8, 16)
 1:0/0 = 0
@@ -2579,7 +2579,7 @@ texture_region_size = Vector2i(8, 16)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xdo7q"]
 resource_name = "BRIGHT_MAGENTA"
-texture = ExtResource("1_lioxf")
+texture = ExtResource("1_hxlch")
 separation = Vector2i(1, 1)
 texture_region_size = Vector2i(8, 16)
 1:0/0 = 0
@@ -3093,7 +3093,7 @@ texture_region_size = Vector2i(8, 16)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6ohur"]
 resource_name = "BRIGHT_BROWN"
-texture = ExtResource("1_lioxf")
+texture = ExtResource("1_hxlch")
 separation = Vector2i(1, 1)
 texture_region_size = Vector2i(8, 16)
 1:0/0 = 0
@@ -3607,7 +3607,7 @@ texture_region_size = Vector2i(8, 16)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_asjjv"]
 resource_name = "BRIGHT_WHITE"
-texture = ExtResource("1_lioxf")
+texture = ExtResource("1_hxlch")
 separation = Vector2i(1, 1)
 texture_region_size = Vector2i(8, 16)
 1:0/0 = 0
@@ -3867,7 +3867,7 @@ texture_region_size = Vector2i(8, 16)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vc6gc"]
 resource_name = "GREEN"
-texture = ExtResource("1_lioxf")
+texture = ExtResource("1_hxlch")
 separation = Vector2i(1, 1)
 texture_region_size = Vector2i(8, 16)
 1:0/0 = 0
@@ -4381,7 +4381,7 @@ texture_region_size = Vector2i(8, 16)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_p07k3"]
 resource_name = "CYAN"
-texture = ExtResource("1_lioxf")
+texture = ExtResource("1_hxlch")
 separation = Vector2i(1, 1)
 texture_region_size = Vector2i(8, 16)
 1:0/0 = 0
@@ -4895,7 +4895,7 @@ texture_region_size = Vector2i(8, 16)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4d4rb"]
 resource_name = "RED"
-texture = ExtResource("1_lioxf")
+texture = ExtResource("1_hxlch")
 separation = Vector2i(1, 1)
 texture_region_size = Vector2i(8, 16)
 1:0/0 = 0
@@ -5409,7 +5409,7 @@ texture_region_size = Vector2i(8, 16)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_v8psi"]
 resource_name = "MAGENTA"
-texture = ExtResource("1_lioxf")
+texture = ExtResource("1_hxlch")
 separation = Vector2i(1, 1)
 texture_region_size = Vector2i(8, 16)
 1:0/0 = 0
@@ -5923,7 +5923,7 @@ texture_region_size = Vector2i(8, 16)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_y1num"]
 resource_name = "BROWN"
-texture = ExtResource("1_lioxf")
+texture = ExtResource("1_hxlch")
 separation = Vector2i(1, 1)
 texture_region_size = Vector2i(8, 16)
 1:0/0 = 0
@@ -6437,7 +6437,7 @@ texture_region_size = Vector2i(8, 16)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7lh6m"]
 resource_name = "WHITE"
-texture = ExtResource("1_lioxf")
+texture = ExtResource("1_hxlch")
 separation = Vector2i(1, 1)
 texture_region_size = Vector2i(8, 16)
 1:0/0 = 0
@@ -6951,7 +6951,7 @@ texture_region_size = Vector2i(8, 16)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lkdui"]
 resource_name = "GRAY"
-texture = ExtResource("1_lioxf")
+texture = ExtResource("1_hxlch")
 separation = Vector2i(1, 1)
 texture_region_size = Vector2i(8, 16)
 1:0/0 = 0
@@ -7465,7 +7465,7 @@ texture_region_size = Vector2i(8, 16)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_sjbp1"]
 resource_name = "BRIGHT_BLUE"
-texture = ExtResource("1_lioxf")
+texture = ExtResource("1_hxlch")
 separation = Vector2i(1, 1)
 texture_region_size = Vector2i(8, 16)
 1:0/0 = 0

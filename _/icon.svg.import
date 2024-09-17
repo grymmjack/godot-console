@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dyx0bes02l76m"
-path="res://.godot/imported/Perfect DOS VGA 437-8x16-SCALED-1x.png-60dcf6e48b824c0592dd1c08bb7ba67f.ctex"
+uid="uid://bxo2v5s5rxc3c"
+path="res://.godot/imported/icon.svg-d3d190cf508e6636135c4b6eb24f207e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ARCHIVE/Perfect DOS VGA 437-8x16-SCALED-1x.png"
-dest_files=["res://.godot/imported/Perfect DOS VGA 437-8x16-SCALED-1x.png-60dcf6e48b824c0592dd1c08bb7ba67f.ctex"]
+source_file="res://_/icon.svg"
+dest_files=["res://.godot/imported/icon.svg-d3d190cf508e6636135c4b6eb24f207e.ctex"]
 
 [params]
 
@@ -32,3 +32,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
+svg/scale=1.0
+editor/scale_with_editor_scale=false
+editor/convert_colors_with_editor_theme=false

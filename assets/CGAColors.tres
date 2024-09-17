@@ -1,6 +1,6 @@
 [gd_resource type="TileSet" load_steps=3 format=3 uid="uid://d4b687rujakbv"]
 
-[ext_resource type="Texture2D" uid="uid://ct2jkolcipff5" path="res://CGA-9x17-SCALED-1x.png" id="1_bp8du"]
+[ext_resource type="Texture2D" uid="uid://ct2jkolcipff5" path="res://assets/CGA-9x17-SCALED-1x.png" id="1_bp8du"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8itbn"]
 resource_name = "CGAColors"

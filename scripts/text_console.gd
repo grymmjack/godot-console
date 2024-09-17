@@ -1,16 +1,22 @@
 class_name TextConsole
 extends Node2D
 
-@export var width:int = 80
-@export var height:int = 25
+@export var rows:int = 25
+@export var columns:int = 80
+@export var background_color:int = G.CGA.BLACK
+@export var foreground_color:int = G.CGA.WHITE
+@export var cursor_position:Vector2i = Vector2i.ZERO
+@export var foreground_tiles:TileMapLayer
+@export var background_tiles:TileMapLayer
 
 static var _fg_color:int = G.CGA.WHITE
 static var _bg_color:int = G.CGA.BLACK
 static var _x:int = 0
 static var _y:int = 0
+static var scrollback_buffer:Array[TextChar]
 
 func _ready() -> void:
-	color(G.CGA.BRIGHT_WHITE, G.CGA.BLUE)
+	color(foreground_color, background_color)
 	cls()
 	print_ruler()
 	locate(10, 2)
@@ -18,8 +24,8 @@ func _ready() -> void:
 
 # print a little ruler
 func print_ruler() -> void:
-	for y in range(height):
-		for x in range(width):
+	for y in range(rows):
+		for x in range(columns):
 			if y == 0:
 				if x % 10 == 0:
 					locate(x, y)
@@ -27,52 +33,55 @@ func print_ruler() -> void:
 		locate(0, y)
 		echo(str(y))
 
+
 # clear screen
 func cls() -> void:
-	for y in range(height):
-		for x in range(width):
+	for y in range(rows):
+		for x in range(columns):
 			bg(Vector2i(x, y), _bg_color)
+	_set_cursor_position(Vector2i(0, 0))
 
-# set default foreground and background text colors
+# set foreground and background text colors
 func color(fg_color:int, bg_color:int) -> void:
-	_fg_color = fg_color
-	_bg_color = bg_color
+	foreground_color = fg_color
+	background_color = bg_color
 
 # set cursor position
 func locate(x:int, y:int) -> void:
-	_x = x
-	_y = y
+	_set_cursor_position(Vector2i(x, y))
 
 # get cursor x position (column)
 func pos(type:int = 0) -> int:
 	match type:
 		0:
-			return _x
+			return cursor_position.x
 		_:
-			return _x
+			return cursor_position.x
 
 # get cusor y position (row)
 func csrlin() -> int:
-	return _y
+	return cursor_position.y
 
 # echo a string print using current colors
 func echo(_str:String) -> void:
-	var _position = Vector2i(_x, _y)
+	var _position = cursor_position
 	for i in len(_str):
 		var cha:String = _str[i]
 		var tile:Vector2i = cha_to_atlas_coord(cha)
 		bg(Vector2i(_position.x+i, _position.y), _bg_color)
 		fg(Vector2i(_position.x+i, _position.y), _fg_color, tile)
+		_set_cursor_position(Vector2i(_position.x+i, _position.y))
 
 
 # echo a string (synonymous with print, but prints in colors)
 func cecho(_str:String, fg_color:int, bg_color:int) -> void:
-	var _position = Vector2i(_x, _y)
+	var _position = cursor_position
 	for i in len(_str):
 		var cha:String = _str[i]
 		var tile:Vector2i = cha_to_atlas_coord(cha)
 		bg(Vector2i(_position.x+i, _position.y), bg_color)
 		fg(Vector2i(_position.x+i, _position.y), fg_color, tile)
+		_set_cursor_position(Vector2i(_position.x+i, _position.y))
 
 # set background color using %BG tilemap layer
 func bg(_position:Vector2i, _color:int) -> void:
@@ -88,3 +97,24 @@ func cha_to_atlas_coord(cha:String) -> Vector2i:
 	var y:int = int(cha_ord / G.FONT_ATLAS_COLS)
 	var x:int = int(cha_ord % G.FONT_ATLAS_COLS)
 	return Vector2i(x, y)
+
+# screen wrap update
+func screen_wrap() -> void:
+	if _y > rows:
+		_y = rows
+		screen_scroll_down()
+	if _x > columns:
+		_y += 1
+		_x = 0
+
+# scrolls screen_down
+# TODO
+func screen_scroll_down() -> void:
+	var tiles:Array[Vector2i] = [ Vector2i.ZERO ]
+	# move top row into memory
+	# move top row+1 to top row-1 for entire tile row
+	# loop until at row height
+
+
+func _set_cursor_position(_position:Vector2i) -> void:
+	cursor_position = _position
