@@ -12,17 +12,18 @@ Code is pretty easy.
 
 The trick here is that there are 2 tilemap layers.
 
-A background one (BG) for background colors under the foreground one (FG).
+A background one (BG) for background colors under the foreground one (FG). Since CGA has 16 background colors we have 16 background tiles in the BG tilemap. Since CGA has 16 foreground colors, we have 16 different atlasses that are modulated to use the CGA colors according to their DOS color index... Then we just use `set_cell` and some little translation funcs to do stuff. This gets us a x, y grid just like `SCREEN 0` in basic, etc. It's not REAL console mode, it's a graphical version. Godot doesn't have the ability to do CLI stuff AFAIK.
 
 I made some BASIC-like API for this so far, but will be adding ANSI support, too.
 
-`echo` = `print`
-`cecho` = `print` in colors (specify fg/bg)
-`locate` = `locate` :D
-`cls` = `cls`
+- `echo` = `print`
+- `cecho` = `print` in colors (specify fg/bg)
+- `locate` = `locate` :D
+- `cls` = `cls`
 
 etc.
 
+See: [textmode.gd](textmode.gd) for basics, and [_global.gd](_global.gd) for the singleton that gets loaded with a bunch of the `consts`, `enums`, etc.
 
 example use:
 ```gdscript
