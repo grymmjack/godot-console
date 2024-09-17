@@ -4,6 +4,10 @@
 
 ![image](https://github.com/user-attachments/assets/0206398b-f128-4126-b79e-6282e94e4634)
 
+The node tree is uncluttered:
+![image](https://github.com/user-attachments/assets/47736fce-2be8-4a01-abcc-e58897c4a3a1)
+
+
 Load TEXTMODE.tscn
 
 Adjust width and height of the TEXTMODE to suit.
