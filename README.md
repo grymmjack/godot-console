@@ -1,6 +1,6 @@
 <del>WIP Godot Text Mode console using RichTextLabel, and bitmap font</del>
 
-# Workging CGA Godot Text Mode 16 color DOS console
+# Working CGA Godot Text Mode 16 color DOS console
 
 ![image](https://github.com/user-attachments/assets/0206398b-f128-4126-b79e-6282e94e4634)
 
