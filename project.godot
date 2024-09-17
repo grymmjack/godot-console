@@ -12,9 +12,9 @@ config_version=5
 
 config/name="godot-console"
 config/tags=PackedStringArray("git")
-run/main_scene="res://console.tscn"
+run/main_scene="res://TEXTMODE.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="res://ARCHIVE/icon.svg"
 
 [autoload]
 
@@ -22,8 +22,8 @@ G="*res://_global.gd"
 
 [display]
 
-window/size/viewport_width=600
-window/size/viewport_height=800
+window/size/viewport_width=640
+window/size/viewport_height=400
 window/stretch/mode="viewport"
 window/stretch/scale_mode="integer"
 

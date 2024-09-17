@@ -47,9 +47,9 @@ DIM AS INTEGER i, x, y
 DIM c AS STRING
 
 FOR i% = 0 TO 15
-    x% = (i% MOD COLS) * GRID_W
-    y% = (i% \ COLS) * GRID_H
-    LINE (x%, y%)-STEP(GRID_W, GRID_H), EGA~&(i%), BF 
+	x% = (i% MOD COLS) * GRID_W
+	y% = (i% \ COLS) * GRID_H
+	LINE (x%, y%)-STEP(GRID_W, GRID_H), EGA~&(i%), BF
 NEXT
 
 DIM scaled_canvas AS LONG

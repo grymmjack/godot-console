@@ -1,5 +1,50 @@
 extends Node
 
+const FONT_ATLAS_COLS = 32
+const FONT_ATLAS_ROWS = 8
+
+const BG_ATLAS_ID = {
+	"ALL": 0
+}
+
+const FG_ATLAS_ID = {
+	"BLACK": 0,
+	"BLUE": 1,
+	"GREEN": 2,
+	"CYAN": 3,
+	"RED": 4,
+	"MAGENTA": 5 ,
+	"BROWN": 6,
+	"WHITE": 7,
+	"GRAY": 8,
+	"BRIGHT_BLUE": 9,
+	"BRIGHT_GREEN": 10,
+	"BRIGHT_CYAN": 11,
+	"BRIGHT_RED": 12,
+	"BRIGHT_MAGENTA": 13,
+	"BRIGHT_BROWN": 14,
+	"BRIGHT_WHITE": 15
+}
+
+var CGA_COLOR = {
+	"BLACK": 0,
+	"BLUE": 1,
+	"GREEN": 2,
+	"CYAN": 3,
+	"RED": 4,
+	"MAGENTA": 5 ,
+	"BROWN": 6,
+	"WHITE": 7,
+	"GRAY": 8,
+	"BRIGHT_BLUE": 9,
+	"BRIGHT_GREEN": 10,
+	"BRIGHT_CYAN": 11,
+	"BRIGHT_RED": 12,
+	"BRIGHT_MAGENTA": 13,
+	"BRIGHT_BROWN": 14,
+	"BRIGHT_WHITE": 15
+}
+
 enum CGA {
 	BLACK,
 	BLUE,

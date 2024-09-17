@@ -7,8 +7,8 @@ CONST COLS=16
 CONST CHAR_W=8
 CONST CHAR_H=16
 
-CONST GRID_W=8
-CONST GRID_H=16
+CONST GRID_W=9
+CONST GRID_H=17
 
 DIM AS LONG w, h, CANVAS
 
@@ -28,11 +28,11 @@ DIM AS INTEGER i, x, y
 DIM c AS STRING
 
 FOR i% = 0 TO 255
-    x% = (i% MOD COLS) * GRID_W
-    y% = (i% \ COLS) * GRID_H
-    c$ = CHR$(i%)
-    _PRINTMODE _KEEPBACKGROUND
-    _PRINTSTRING (x%, y%), c$
+	x% = (i% MOD COLS) * GRID_W
+	y% = (i% \ COLS) * GRID_H
+	c$ = CHR$(i%)
+	_PRINTMODE _KEEPBACKGROUND
+	_PRINTSTRING (x%, y%), c$
 NEXT
 
 DIM scaled_canvas AS LONG
