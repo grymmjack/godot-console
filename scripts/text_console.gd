@@ -36,29 +36,12 @@ enum HORIZONTAL_DIRECTION { LEFT, RIGHT }
 
 const FONT_ATLAS_COLS := 32
 const FONT_ATLAS_ROWS := 8
-
-const BG_ATLAS_ID := {
-	"ALL": 0
-}
-
-const FG_ATLAS_ID := {
-	"BLACK": 0,
-	"BLUE": 1,
-	"GREEN": 2,
-	"CYAN": 3,
-	"RED": 4,
-	"MAGENTA": 5 ,
-	"BROWN": 6,
-	"WHITE": 7,
-	"GRAY": 8,
-	"BRIGHT_BLUE": 9,
-	"BRIGHT_GREEN": 10,
-	"BRIGHT_CYAN": 11,
-	"BRIGHT_RED": 12,
-	"BRIGHT_MAGENTA": 13,
-	"BRIGHT_BROWN": 14,
-	"BRIGHT_WHITE": 15
-}
+const BASE_FONT_TEXTURE:Texture2D = preload("res://assets/Perfect DOS VGA 437_2.png")
+const BASE_TILESET:TileSet = preload("res://assets/DOSFont-BASE.tres")
+const BASE_TILE_SIZE:Vector2i = Vector2i(8, 16)
+const TARGET_PATH:String = "res://assets"
+const BG_ATLAS_ID := 0
+const FG_ATLAS_ID := 0
 
 var CGA_COLOR := {
 	"BLACK": 0,
@@ -115,6 +98,25 @@ var CGA_PALETTE := [
 	Color(255, 85, 255),	# BRIGHT MAGENTA
 	Color(255, 255, 85),	# BRIGHT BROWN
 	Color(255, 255, 255)	# BRIGHT WHITE
+]
+
+var CGA_MODULATED := [
+	Color(0, 0, 0),			# BLACK
+	Color(0, 0, 0.66),		# BLUE
+	Color(0, 0.66, 0),		# GREEN
+	Color(0, 0.66, 0.66),	# CYAN
+	Color(0.66, 0, 0),		# RED
+	Color(0.66, 0, 0.66),	# MAGENTA
+	Color(0.66, 0.33, 0),	# BROWN
+	Color(0.66, 0.66, 0.66),# WHITE
+	Color(0.33, 0.33, 0.33),# GRAY
+	Color(0.33, 0.33, 1.0),	# BRIGHT BLUE
+	Color(0.33, 1.0, 0.33),	# BRIGHT GREEN
+	Color(0.33, 1.0, 1.0),	# BRIGHT CYAN
+	Color(1.0, 0.33, 0.33),	# BRIGHT RED
+	Color(1.0, 0.33, 1.0),	# BRIGHT MAGENTA
+	Color(1.0, 1.0, 0.33),	# BRIGHT BROWN
+	Color(1.0, 1.0, 1.0)	# BRIGHT WHITE
 ]
 
 var DOS_ANSI_CHARACTERS_DECIMAL := {
@@ -234,13 +236,13 @@ func cecho(_str:String, fg_color:int, bg_color:int) -> void:
 func bg(_position:Vector2i, _color:int) -> void:
 	color_changed.emit()
 	bg_color_changed.emit()
-	%BG.set_cell(_position, BG_ATLAS_ID["ALL"], Vector2i(_color, 0))
+	%BG.set_cell(_position, BG_ATLAS_ID, Vector2i(_color, 0))
 
 # set a foreground colored cell using %FG tilemap layer
 func fg(_position:Vector2i, _color:int, _tile:Vector2i) -> void:
 	color_changed.emit()
 	fg_color_changed.emit()
-	%FG.set_cell(_position, _color, _tile)
+	%FG.set_cell(_position, FG_ATLAS_ID, _tile, _color + CGA_PALETTE.size())
 
 # map character to font atlas
 func cha_to_atlas_coord(cha:String) -> Vector2i:
@@ -285,3 +287,28 @@ func input(prompt:String) -> String:
 func inkey() -> String:
 	awaiting_input.emit()
 	return ""
+
+# Create colored tile alternates
+# thank you to Selina - https://github.com/SelinaDev/
+func create_colored_tiles(colors, base_tileset:TileSet, base_texture:Texture2D, font_name:String, palette_name:String) -> void:
+	var tileset:TileSet = base_tileset.duplicate(true)
+	var tileset_source:TileSetAtlasSource = tileset.get_source(0)
+	var grid_size:Vector2i = tileset_source.get_atlas_grid_size()
+	var total_colors:int = colors.size()
+	for c:int in range(0, total_colors):
+		tileset.resource_name = font_name
+		tileset_source.resource_name = palette_name
+		var _color:Color = colors[c]
+		print(colors[c])
+		for y:int in range(grid_size.y):
+			for x:int in range(grid_size.x):
+				var id:int = tileset_source.create_alternative_tile(Vector2i(x, y), c + total_colors)
+				var colored_tile_data:TileData = tileset_source.get_tile_data(Vector2i(x, y), id)
+				colored_tile_data.modulate.r8 = colors[c].r
+				colored_tile_data.modulate.g8 = colors[c].g
+				colored_tile_data.modulate.b8 = colors[c].b
+				var cha:String = String.chr(y * 31 + x)
+		print("Created alternative tileset for COLOR %d" % [ c ])
+	var filename:String =  TARGET_PATH + "/DOSFont-%s.tres" % palette_name
+	ResourceSaver.save(tileset, filename)
+	print("Created %s" % filename)

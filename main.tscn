@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://cdh6pa166pfpb"]
 
 [ext_resource type="TileSet" uid="uid://d4b687rujakbv" path="res://assets/CGAColors.tres" id="2_756jj"]
-[ext_resource type="TileSet" uid="uid://c3x4bm484vj6k" path="res://assets/DOSFont.tres" id="3_8dn8d"]
+[ext_resource type="TileSet" uid="uid://b5nwa7q7fqth7" path="res://assets/DOSFont-CGA.tres" id="3_5sp2r"]
 [ext_resource type="Script" path="res://scripts/main.gd" id="4_exks7"]
 
 [node name="SCREEN" type="Node"]
@@ -14,4 +14,4 @@ tile_set = ExtResource("2_756jj")
 
 [node name="FG" type="TileMapLayer" parent="."]
 unique_name_in_owner = true
-tile_set = ExtResource("3_8dn8d")
+tile_set = ExtResource("3_5sp2r")

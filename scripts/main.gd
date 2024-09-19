@@ -3,6 +3,8 @@ class_name TextScreen
 extends TextConsole
 
 func _ready() -> void:
+	#create_colored_tiles(CGA_PALETTE, BASE_TILESET, BASE_FONT_TEXTURE, "DOS 8x16", "CGA")
+	color(CGA.BRIGHT_WHITE, CGA.BLUE)
 	cls()
 	print_ruler()
 	locate(10, 2)
