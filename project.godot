@@ -11,14 +11,12 @@ config_version=5
 [application]
 
 config/name="godot-console"
+config/description="Godot text mode console compatible with ANSI colors, iCE colors, and 8x16px DOS font for rendering ANSI art in Godot using tilemaps! "
+config/version="0.1"
 config/tags=PackedStringArray("git")
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
-config/icon="res://_/icon.svg"
-
-[autoload]
-
-G="*res://scripts/_global.gd"
+config/icon="res://icon.svg"
 
 [display]
 
