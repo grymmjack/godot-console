@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://y14wi4most6x"
-path="res://.godot/imported/MorePerfectDOSVGANF-4.ttf-45e1470d737ce8db886985139d48926c.fontdata"
+path="res://.godot/imported/MorePerfectDOSVGANF-4.ttf-a97491a5c2c45077538f1089a857a8cd.fontdata"
 
 [deps]
 
-source_file="res://_/MorePerfectDOSVGANF-4.ttf"
-dest_files=["res://.godot/imported/MorePerfectDOSVGANF-4.ttf-45e1470d737ce8db886985139d48926c.fontdata"]
+source_file="res://assets/MorePerfectDOSVGANF-4.ttf"
+dest_files=["res://.godot/imported/MorePerfectDOSVGANF-4.ttf-a97491a5c2c45077538f1089a857a8cd.fontdata"]
 
 [params]
 
