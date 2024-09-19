@@ -4,9 +4,11 @@
 [ext_resource type="TileSet" uid="uid://b5nwa7q7fqth7" path="res://assets/DOSFont-CGA.tres" id="3_5sp2r"]
 [ext_resource type="Script" path="res://scripts/main.gd" id="4_exks7"]
 
-[node name="SCREEN" type="Node"]
+[node name="SCREEN" type="Node" node_paths=PackedStringArray("background", "foreground")]
 script = ExtResource("4_exks7")
 background_color = 1
+background = NodePath("BG")
+foreground = NodePath("FG")
 
 [node name="BG" type="TileMapLayer" parent="."]
 unique_name_in_owner = true

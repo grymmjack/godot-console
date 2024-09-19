@@ -1,7 +1,7 @@
 @icon("res://icon.svg")
 class_name TextConsole
-
 extends Node
+
 signal is_ready
 signal is_scrolling
 signal is_printing
@@ -290,7 +290,7 @@ func inkey() -> String:
 
 # Create colored tile alternates
 # thank you to Selina - https://github.com/SelinaDev/
-func create_colored_tiles(colors, base_tileset:TileSet, base_texture:Texture2D, font_name:String, palette_name:String) -> void:
+func create_colored_tiles(colors, base_tileset:TileSet, font_name:String, palette_name:String) -> void:
 	var tileset:TileSet = base_tileset.duplicate(true)
 	var tileset_source:TileSetAtlasSource = tileset.get_source(0)
 	var grid_size:Vector2i = tileset_source.get_atlas_grid_size()
@@ -307,7 +307,6 @@ func create_colored_tiles(colors, base_tileset:TileSet, base_texture:Texture2D, 
 				colored_tile_data.modulate.r8 = colors[c].r
 				colored_tile_data.modulate.g8 = colors[c].g
 				colored_tile_data.modulate.b8 = colors[c].b
-				var cha:String = String.chr(y * 31 + x)
 		print("Created alternative tileset for COLOR %d" % [ c ])
 	var filename:String =  TARGET_PATH + "/DOSFont-%s.tres" % palette_name
 	ResourceSaver.save(tileset, filename)
