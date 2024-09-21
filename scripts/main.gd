@@ -3,9 +3,8 @@ class_name TextScreen
 extends AnsiParser
 
 func _ready() -> void:
-	#create_colored_tiles(CGA_PALETTE, BASE_TILESET, BASE_FONT_TEXTURE, "DOS 8x16", "CGA")
-	color(CGA.BRIGHT_WHITE, CGA.BLUE)
-	cls()
+	#create_colored_tiles(CGA_PALETTE, BASE_TILESET, "DOS 8x16", "CGA")
+	#color(CGA.BRIGHT_WHITE, CGA.BLUE)
 	#print_ruler()
 	#locate(79, 0)
 	#cecho("Hello, World!", 14, 4)
@@ -23,7 +22,9 @@ func _ready() -> void:
 	#echo("Hello, World!")
 	#echo("Hello, World!")
 	#echo("Hello, World!")
-	load_ansi_file("res://assets/gj-test-4.ans")
+	load_ansi_file("res://assets/gj-test1.ans")
+	locate(0, 20)
+	echo("Hi")
 	#echo("A")
 	#if sauce_data != null:
 		## Display metadata at the top of the console

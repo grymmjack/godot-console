@@ -30,6 +30,7 @@ signal ansi_detected
 @export var foreground:TileMapLayer
 
 static var _scrollback_buffer:Array[TextChar]
+static var _bright:bool = false
 
 enum VERTICAL_DIRECTION { DOWN, UP }
 enum HORIZONTAL_DIRECTION { LEFT, RIGHT }
@@ -45,77 +46,77 @@ const FG_ATLAS_ID := 0
 
 var CGA_COLOR := {
 	"BLACK": 0,
-	"BLUE": 1,
+	"RED": 1,
 	"GREEN": 2,
-	"CYAN": 3,
-	"RED": 4,
-	"MAGENTA": 5 ,
-	"BROWN": 6,
+	"BROWN": 3,
+	"BLUE": 4,
+	"MAGENTA": 5,
+	"CYAN": 6,
 	"WHITE": 7,
 	"GRAY": 8,
-	"BRIGHT_BLUE": 9,
+	"BRIGHT_RED": 9,
 	"BRIGHT_GREEN": 10,
-	"BRIGHT_CYAN": 11,
-	"BRIGHT_RED": 12,
+	"BRIGHT_BROWN": 11,
+	"BRIGHT_BLUE": 12,
 	"BRIGHT_MAGENTA": 13,
-	"BRIGHT_BROWN": 14,
+	"BRIGHT_CYAN": 14,
 	"BRIGHT_WHITE": 15
 }
 
 enum CGA {
 	BLACK,
-	BLUE,
-	GREEN,
-	CYAN,
 	RED,
-	MAGENTA,
+	GREEN,
 	BROWN,
+	BLUE,
+	MAGENTA,
+	CYAN,
 	WHITE,
 	GRAY,
-	BRIGHT_BLUE,
-	BRIGHT_GREEN,
-	BRIGHT_CYAN,
 	BRIGHT_RED,
-	BRIGHT_MAGENTA,
+	BRIGHT_GREEN,
 	BRIGHT_BROWN,
+	BRIGHT_BLUE,
+	BRIGHT_MAGENTA,
+	BRIGHT_CYAN,
 	BRIGHT_WHITE
 }
 
 var CGA_PALETTE := [
 	Color(0, 0, 0),			# BLACK
-	Color(0, 0, 170),		# BLUE
-	Color(0, 170, 0),		# GREEN
-	Color(0, 170, 170),		# CYAN
 	Color(170, 0, 0),		# RED
-	Color(170, 0, 170),		# MAGENTA
+	Color(0, 170, 0),		# GREEN
 	Color(170, 85, 0),		# BROWN
+	Color(0, 0, 170),		# BLUE
+	Color(170, 0, 170),		# MAGENTA
+	Color(0, 170, 170),		# CYAN
 	Color(170, 170, 170),	# WHITE
 	Color(85, 85, 85),		# GRAY
-	Color(85, 85, 255),		# BRIGHT BLUE
-	Color(85, 255, 85),		# BRIGHT GREEN
-	Color(85, 255, 255),	# BRIGHT CYAN
 	Color(255, 85, 85),		# BRIGHT RED
-	Color(255, 85, 255),	# BRIGHT MAGENTA
+	Color(85, 255, 85),		# BRIGHT GREEN
 	Color(255, 255, 85),	# BRIGHT BROWN
+	Color(85, 85, 255),		# BRIGHT BLUE
+	Color(255, 85, 255),	# BRIGHT MAGENTA
+	Color(85, 255, 255),	# BRIGHT CYAN
 	Color(255, 255, 255)	# BRIGHT WHITE
 ]
 
 var CGA_MODULATED := [
 	Color(0, 0, 0),			# BLACK
-	Color(0, 0, 0.66),		# BLUE
-	Color(0, 0.66, 0),		# GREEN
-	Color(0, 0.66, 0.66),	# CYAN
 	Color(0.66, 0, 0),		# RED
-	Color(0.66, 0, 0.66),	# MAGENTA
+	Color(0, 0.66, 0),		# GREEN
 	Color(0.66, 0.33, 0),	# BROWN
+	Color(0, 0, 0.66),		# BLUE
+	Color(0.66, 0, 0.66),	# MAGENTA
+	Color(0, 0.66, 0.66),	# CYAN
 	Color(0.66, 0.66, 0.66),# WHITE
 	Color(0.33, 0.33, 0.33),# GRAY
-	Color(0.33, 0.33, 1.0),	# BRIGHT BLUE
-	Color(0.33, 1.0, 0.33),	# BRIGHT GREEN
-	Color(0.33, 1.0, 1.0),	# BRIGHT CYAN
 	Color(1.0, 0.33, 0.33),	# BRIGHT RED
-	Color(1.0, 0.33, 1.0),	# BRIGHT MAGENTA
+	Color(0.33, 1.0, 0.33),	# BRIGHT GREEN
 	Color(1.0, 1.0, 0.33),	# BRIGHT BROWN
+	Color(0.33, 0.33, 1.0),	# BRIGHT BLUE
+	Color(1.0, 0.33, 1.0),	# BRIGHT MAGENTA
+	Color(0.33, 1.0, 1.0),	# BRIGHT CYAN
 	Color(1.0, 1.0, 1.0)	# BRIGHT WHITE
 ]
 
@@ -244,7 +245,6 @@ func bg(_position:Vector2i, _color:int) -> void:
 func fg(_position:Vector2i, _color:int, _tile:Vector2i) -> void:
 	color_changed.emit()
 	fg_color_changed.emit()
-	#set_cell(coords: Vector2i, source_id: int = -1, atlas_coords: Vector2i = Vector2i(-1, -1), alternative_tile: int = 0)
 	var alternative_tile:int = _color + CGA_PALETTE.size()
 	var source_id:int = FG_ATLAS_ID
 	%FG.set_cell(_position, source_id, _tile, alternative_tile)

@@ -41,14 +41,14 @@ const GFX_STRIKEOUT       := "9m"
 # FOREGROUND COLORS
 const COLOR_RESET         := "0m"
 const COLOR_FG_DEFAULT    := "39m"
-const COLOR_FG_BLACK      := "0;30"
-const COLOR_FG_BLUE       := "0;34"
-const COLOR_FG_GREEN      := "0;32"
-const COLOR_FG_CYAN       := "0;36"
-const COLOR_FG_RED        := "0;31"
-const COLOR_FG_MAGENTA    := "0;35"
-const COLOR_FG_BROWN      := "0;33"
-const COLOR_FG_WHITE      := "0;37"
+const COLOR_FG_BLACK      := "0;30" #ok
+const COLOR_FG_BLUE       := "0;34" #1
+const COLOR_FG_GREEN      := "0;32" #ok
+const COLOR_FG_CYAN       := "0;36" #3
+const COLOR_FG_RED        := "0;31" #4
+const COLOR_FG_MAGENTA    := "0;35" #ok
+const COLOR_FG_BROWN      := "0;33" #6
+const COLOR_FG_WHITE      := "0;37" #ok
 const COLOR_FG_GRAY       := "1;30"
 const COLOR_FG_BR_BLUE    := "1;34"
 const COLOR_FG_BR_GREEN   := "1;32"
@@ -131,8 +131,6 @@ func parse_ansi(data: PackedByteArray):
 				_set_cursor_position(Vector2i(0, cursor_position.y))
 			else:
 				# Draw character
-				#print(ASCII_UNICODE[char_code])
-				#var char_to_echo:String = String.chr(char_code)
 				echo(ASCII_UNICODE[char_code])
 
 func process_ansi_sequence(seq):
@@ -192,15 +190,16 @@ func process_sgr(params):
 				# Reset all attributes
 				foreground_color = CGA.WHITE  # Default foreground
 				background_color = CGA.BLACK  # Default background
+				_bright = false
 				#blink = false
 			1:
 				# Bold on (bright foreground)
-				if foreground_color < 8:
-					foreground_color += 8
-			22:
+				#foreground_color += 8
+				_bright = true
+			#22:
 				# Bold off
-				if foreground_color >= 8:
-					foreground_color -= 8
+				#if foreground_color >= 8:
+					#foreground_color -= 8
 			#5:
 				# Blink on
 				#blink = true
@@ -209,16 +208,16 @@ func process_sgr(params):
 				#blink = false
 			p when (p >= 30 and p <= 37):
 				# Set foreground color
-				foreground_color = p - 30
+				foreground_color = p - 30 if !_bright else p - 30 + 8
 			p when (p >= 90 and p <= 97):
 				# Set bright foreground color
-				foreground_color = p - 90 + 8
+				foreground_color = p - 90
 			p when (p >= 40 and p <= 47):
 				# Set background color
-				background_color = p - 40
+				background_color = p - 40 if !_bright else p - 40 + 8
 			p when (p >= 100 and p <= 107):
 				# Set bright background color
-				background_color = p - 100 + 8
+				background_color = p - 100
 			# Add other attributes if needed
 			_:
 				# Unhandled SGR code
@@ -286,59 +285,6 @@ func clear_line(line_index: int):
 		bg(Vector2i(x, line_index), current_bg_color)
 		fg(Vector2i(x, line_index), current_fg_color, cha_to_atlas_coord(" "))
 
-func set_graphics_mode(params: Array):
-	print(params)
-	var bright:bool = false
-	for param in params:
-		match param:
-			"0":
-				bright = false
-				reset_styles()
-			"1":
-				bright = true
-				set_bold(true)
-			"2":
-				set_dimmed(true)
-			"3":
-				set_italic(true)
-			"4":
-				set_underline(true)
-			"7":
-				swap_colors()
-			"30":
-				current_fg_color = CGA.BLACK if !bright else CGA.GRAY
-			"31":
-				current_fg_color = CGA.RED if !bright else CGA.BRIGHT_RED
-			"32":
-				current_fg_color = CGA.GREEN if !bright else CGA.BRIGHT_GREEN
-			"33":
-				current_fg_color = CGA.BROWN if !bright else CGA.BRIGHT_BROWN
-			"34":
-				current_fg_color = CGA.BLUE if !bright else CGA.BRIGHT_BLUE
-			"35":
-				current_fg_color = CGA.MAGENTA if !bright else CGA.BRIGHT_MAGENTA
-			"36":
-				current_fg_color = CGA.CYAN if !bright else CGA.BRIGHT_CYAN
-			"37":
-				current_fg_color = CGA.WHITE if !bright else CGA.BRIGHT_WHITE
-			"40":
-				current_bg_color = CGA.BLACK if !bright else CGA.GRAY
-			"41":
-				current_bg_color = CGA.RED if !bright else CGA.BRIGHT_RED
-			"42":
-				current_bg_color = CGA.GREEN if !bright else CGA.BRIGHT_GREEN
-			"43":
-				current_bg_color = CGA.BROWN if !bright else CGA.BRIGHT_BROWN
-			"44":
-				current_bg_color = CGA.BLUE if !bright else CGA.BRIGHT_BLUE
-			"45":
-				current_bg_color = CGA.MAGENTA if !bright else CGA.BRIGHT_MAGENTA
-			"46":
-				current_bg_color = CGA.CYAN if !bright else CGA.BRIGHT_CYAN
-			"47":
-				current_bg_color = CGA.WHITE if !bright else CGA.BRIGHT_WHITE
-	update_console_color()  # Apply the current colors
-
 func reset_styles():
 	reset_colors()
 	# Reset other styles as needed
@@ -349,7 +295,6 @@ func reset_colors():
 	update_console_color()
 
 func update_console_color():
-	printt(current_bg_color, current_fg_color)
 	color(current_fg_color, current_bg_color)
 
 func move_cursor(delta: Vector2i):
@@ -492,7 +437,7 @@ func load_ansi_file(file_path: String) -> void:
 		var content_length = file.get_length()
 		if sauce_data != null:
 			# Exclude SAUCE record and comments from content
-			content_length -= (SAUCE_RECORD_SIZE + (COMMENT_BLOCK_SIZE * sauce_data.Comments))
+			content_length -= (SAUCE_RECORD_SIZE + (COMMENT_BLOCK_SIZE * sauce_data.Comments)) + 1
 		var content:PackedByteArray
 		for i:int in range(content_length):
 			content.append(file.get_8())
