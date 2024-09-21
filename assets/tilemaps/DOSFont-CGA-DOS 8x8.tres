@@ -1,13 +1,13 @@
-[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://c0lfvttajh5tm"]
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://cchah5npvlex5"]
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_1okld"]
-load_path = "res://.godot/imported/Perfect DOS VGA 437_2.png-3a493a7cbbc72980297535c121ad9e02.ctex"
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_31d81"]
+load_path = "res://.godot/imported/DOS-8x8-9x9-SCALED-1x.png-35774f8a75f0398865e1e79194e2e5df.ctex"
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2pxaw"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rdcna"]
 resource_name = "CGA"
-texture = SubResource("CompressedTexture2D_1okld")
+texture = SubResource("CompressedTexture2D_31d81")
 separation = Vector2i(1, 1)
-texture_region_size = Vector2i(8, 16)
+texture_region_size = Vector2i(8, 8)
 use_texture_padding = false
 0:0/next_alternative_id = 2
 0:0/0 = 0
@@ -8459,6 +8459,6 @@ use_texture_padding = false
 31:7/31 = 31
 
 [resource]
-resource_name = "DOS 8x16"
-tile_size = Vector2i(8, 16)
-sources/0 = SubResource("TileSetAtlasSource_2pxaw")
+resource_name = "DOS 8x8"
+tile_size = Vector2i(8, 8)
+sources/0 = SubResource("TileSetAtlasSource_rdcna")

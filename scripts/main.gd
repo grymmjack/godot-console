@@ -2,54 +2,19 @@
 class_name TextScreen
 extends AnsiParser
 
-#func _enter_tree() -> void:
-	#var _width:int = columns * 8
-	#var _height:int = rows * 16
-	#printt(columns, rows, _width, _height)
-	#get_window().size = Vector2i(_width, _height)
-	#get_window().content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
-	#get_window().content_scale_factor = scale
-	#get_window().content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
-	#get_window().content_scale_size = Vector2i(_width, _height)
-	#get_window().content_scale_stretch = Window.CONTENT_SCALE_STRETCH_INTEGER
-	#get_viewport().size = Vector2i(_width, _height)
-	#DisplayServer.window_set_size(Vector2i(_width, _height), DisplayServer.window_get_current_screen())
-	#get_tree().root.size = Vector2i(_width, _height)
-	#get_tree().root.position = Vector2i(0, 0)
-	#get_tree().root.get_viewport().size = Vector2i(_width, _height)
-	#get_viewport().size = Vector2i(_width, _height)
-	#DisplayServer.window_set_size(Vector2i(_width, _height), DisplayServer.window_get_current_screen())
-	#get_tree().root.size = Vector2i(_width, _height)
-	#get_tree().root.position = Vector2i(0, 0)
-	#get_tree().root.get_viewport().size = Vector2i(_width, _height)
-	#%BG.position = Vector2i(0, 0)
-	#%FG.position = Vector2i(0, 0)
-	#%BG.update_internals()
-	#%FG.update_internals()
-
 func _ready() -> void:
-	#create_colored_tiles(CGA_PALETTE, BASE_TILESET, "DOS 8x16", "CGA")
+	#create_colored_tiles(CGA_PALETTE, BASE_TILESET_8x8, "DOS 8x8", "CGA")
+	#create_colored_tiles(CGA_PALETTE, BASE_TILESET_8x16, "DOS 8x16", "CGA")
+	#create_colored_tiles(CGA_PALETTE, BASE_TILESET_9x16, "DOS 9x16", "CGA")
+	#get_tree().quit(0)
 	#color(CGA.BRIGHT_WHITE, CGA.BLUE)
 	#cls()
 	#print_ruler()
 	#locate(79, 0)
 	#cecho("Hello, World!", 14, 4)
-	#echo("Hello, World!")
-	#echo("Hello, World!")
-	#echo("Hello, World!")
-	#echo("Hello, World!")
-	#echo("Hello, World!")
-	#echo("Hello, World!")
-	#echo("Hello, World!")
-	#echo("Hello, World!")
-	#echo("Hello, World!")
-	#echo("Hello, World!")
-	#echo("Hello, World!")
-	#echo("Hello, World!")
-	#echo("Hello, World!")
-	#echo("Hello, World!")
 	#load_ansi_file("res://assets/stormtrooper-pixel-art.png-25-OPT.ans")
-	load_ansi_file("res://assets/gj-fuel2.ans")
+	load_ansi_file("res://assets/ANSIs/gj-fuel2.ans")
+	#load_ansi_file("res://assets/gj-fuel2-8x14.ans")
 	#locate(0, 50)
 	#echo("Hi")
 	#echo("A")

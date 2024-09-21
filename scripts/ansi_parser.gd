@@ -341,14 +341,16 @@ func swap_colors():
 var sauce_data: SauceParser.SauceData = null
 func load_ansi_file(file_path: String) -> void:
 	var sauce_parser = SauceParser.new()
+	var content_length:int = 0
 	sauce_data = sauce_parser.parse_sauce(file_path)
 
 	var file = FileAccess.open(file_path, FileAccess.READ)
 	if file:
-		var content_length = file.get_length()
-		if sauce_data != null:
+		if sauce_data == null:
+			content_length = file.get_length()
+		else:
 			# Exclude SAUCE record and comments from content
-			content_length -= sauce_parser.SAUCE_RECORD_SIZE + (sauce_parser.COMMENT_BLOCK_SIZE * sauce_data.Comments) + 1
+			content_length = sauce_data.FileSize
 		var content:PackedByteArray
 		for i:int in range(content_length):
 			content.append(file.get_8())

@@ -14,9 +14,15 @@ signal bg_color_changed
 signal fg_color_changed
 signal ansi_detected
 
+const SCREEN_MODE_8x8  = "8x8"
+const SCREEN_MODE_8x16 = "8x16"
+const SCREEN_MODE_9x16 = "9x16"
+enum SCREEN_MODE { FONT_8x8, FONT_8x16, FONT_9x16 }
+
 @export_group("Screen")
 @export var rows:int = 25
 @export var columns:int = 80
+@export_enum(SCREEN_MODE_8x8, SCREEN_MODE_8x16, SCREEN_MODE_9x16) var screen_mode: set = setup_screen_mode
 @export var scale:int = 1
 @export var scrollback_size:int = 1000
 @export_group("Colors")
@@ -39,12 +45,25 @@ enum HORIZONTAL_DIRECTION { LEFT, RIGHT }
 
 const FONT_ATLAS_COLS := 32
 const FONT_ATLAS_ROWS := 8
-const BASE_FONT_TEXTURE:Texture2D = preload("res://assets/Perfect DOS VGA 437_2.png")
-const BASE_TILESET:TileSet = preload("res://assets/DOSFont-BASE.tres")
-const BASE_TILE_SIZE:Vector2i = Vector2i(8, 16)
-const TARGET_PATH:String = "res://assets"
+
+const BASE_FONT_TEXTURE_8x8:Texture2D = preload("res://assets/images/DOS-8x8-9x9-SCALED-1x.png")
+const BASE_TILESET_8x8:TileSet = preload("res://assets/tilemaps/DOSFont-BASE-8x8.tres")
+const BASE_TILE_SIZE_8x8:Vector2i = Vector2i(8, 8)
+
+const BASE_FONT_TEXTURE_8x16:Texture2D = preload("res://assets/images/DOS-8x16-9x17-SCALED-1x.png")
+const BASE_TILESET_8x16:TileSet = preload("res://assets/tilemaps/DOSFont-BASE-8x16.tres")
+const BASE_TILE_SIZE_8x16:Vector2i = Vector2i(8, 16)
+
+const BASE_FONT_TEXTURE_9x16:Texture2D = preload("res://assets/images/DOS-9x16-9x17-SCALED-1x.png")
+const BASE_TILESET_9x16:TileSet = preload("res://assets/tilemaps/DOSFont-BASE-9x16.tres")
+const BASE_TILE_SIZE_9x16:Vector2i = Vector2i(9, 16)
+
+const TARGET_PATH:String = "res://assets/tilemaps"
 const BG_ATLAS_ID := 0
 const FG_ATLAS_ID := 0
+
+var character_width:int
+var character_height:int
 
 var CGA_COLOR := {
 	"BLACK": 0,
@@ -180,6 +199,13 @@ var UNICODE_ASCII := { "": 0, "☺": 1, "☻": 2, "♥": 3, "♦": 4, "♣": 5, 
 var ASCII_UNICODE := [ "", "☺", "☻", "♥", "♦", "♣", "♠", "•", "◘", "○", "◙", "♂", "♀", "♪", "♫", "☼", "►", "◄", "↕", "‼", "¶", "§", "▬", "↨", "↑", "↓", "→", "←", "∟", "↔", "▲", "▼", " ", "!", "\"", "#", "$", "%", "&", "\'", "(", ")", "*", "+", ",", "-", ".", "/", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ":", ";", "<", "=", ">", "?", "@", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "[", "\\", "]", "^", "_", "`", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "{", "|", "}", "~", "⌂", "Ç", "ü", "é", "â", "ä", "à", "å", "ç", "ê", "ë", "è", "ï", "î", "ì", "Ä", "Å", "É", "æ", "Æ", "ô", "ö", "ò", "û", "ù", "ÿ", "Ö", "Ü", "¢", "£", "¥", "₧", "ƒ", "á", "í", "ó", "ú", "ñ", "Ñ", "ª", "º", "¿", "⌐", "¬", "½", "¼", "¡", "«", "»", "░", "▒", "▓", "│", "┤", "╡", "╢", "╖", "╕", "╣", "║", "╗", "╝", "╜", "╛", "┐", "└", "┴", "┬", "├", "─", "┼", "╞", "╟", "╚", "╔", "╩", "╦", "╠", "═", "╬", "╧", "╨", "╤", "╥", "╙", "╘", "╒", "╓", "╫", "╪", "┘", "┌", "█", "▄", "▌", "▐", "▀", "α", "ß", "Γ", "π", "Σ", "σ", "µ", "τ", "Φ", "Θ", "Ω", "δ", "∞", "φ", "ε", "∩", "≡", "±", "≥", "≤", "⌠", "⌡", "÷", "≈", "°", "∙", "·", "√", "ⁿ", "²", "■", " " ]
 
 func _enter_tree() -> void:
+	setup_window()
+
+func _ready() -> void:
+	setup_screen_mode(screen_mode)
+	is_ready.emit()
+
+func setup_window() -> void:
 	var _width:int = columns * 8 * scale
 	var _height:int = rows * 16 * scale
 	get_window().size = Vector2i(_width, _height)
@@ -187,12 +213,29 @@ func _enter_tree() -> void:
 	get_window().content_scale_factor = scale
 	get_window().content_scale_mode = Window.CONTENT_SCALE_MODE_VIEWPORT
 	get_window().content_scale_size = Vector2i(_width, _height)
-	#get_window().content_scale_stretch = Window.CONTENT_SCALE_STRETCH_INTEGER
-	#get_viewport().size = Vector2i(_width, _height)
-	#DisplayServer.window_set_size(Vector2i(_width, _height), DisplayServer.window_get_current_screen())
 
-func _ready() -> void:
-	is_ready.emit()
+func setup_screen_mode(mode:int) -> void:
+	if !is_inside_tree():
+		return
+	%BG_8x8.hide()
+	%BG_8x16.hide()
+	%BG_9x16.hide()
+	%FG_8x8.hide()
+	%FG_8x16.hide()
+	%FG_9x16.hide()
+	match mode:
+		SCREEN_MODE.FONT_8x8:
+			%BG_8x8.show()
+			%FG_8x8.show()
+			screen_mode = SCREEN_MODE.FONT_8x8
+		SCREEN_MODE.FONT_8x16:
+			%BG_8x16.show()
+			%FG_8x16.show()
+			screen_mode = SCREEN_MODE.FONT_8x16
+		SCREEN_MODE.FONT_9x16:
+			%BG_9x16.show()
+			%FG_9x16.show()
+			screen_mode = SCREEN_MODE.FONT_9x16
 
 # clear screen
 func cls() -> void:
@@ -253,7 +296,9 @@ func cecho(_str:String, fg_color:int, bg_color:int) -> void:
 func bg(_position:Vector2i, _color:int) -> void:
 	color_changed.emit()
 	bg_color_changed.emit()
-	%BG.set_cell(_position, BG_ATLAS_ID, Vector2i(_color, 0))
+	%BG_8x8.set_cell(_position, BG_ATLAS_ID, Vector2i(_color, 0))
+	%BG_8x16.set_cell(_position, BG_ATLAS_ID, Vector2i(_color, 0))
+	%BG_9x16.set_cell(_position, BG_ATLAS_ID, Vector2i(_color, 0))
 
 # set a foreground colored cell using %FG tilemap layer
 func fg(_position:Vector2i, _color:int, _tile:Vector2i) -> void:
@@ -261,7 +306,9 @@ func fg(_position:Vector2i, _color:int, _tile:Vector2i) -> void:
 	fg_color_changed.emit()
 	var alternative_tile:int = _color + CGA_PALETTE.size()
 	var source_id:int = FG_ATLAS_ID
-	%FG.set_cell(_position, source_id, _tile, alternative_tile)
+	%FG_8x8.set_cell(_position, source_id, _tile, alternative_tile)
+	%FG_8x16.set_cell(_position, source_id, _tile, alternative_tile)
+	%FG_9x16.set_cell(_position, source_id, _tile, alternative_tile)
 
 # map character to font atlas
 func cha_to_atlas_coord(cha:String) -> Vector2i:
@@ -328,6 +375,6 @@ func create_colored_tiles(colors, base_tileset:TileSet, font_name:String, palett
 				colored_tile_data.modulate.g8 = colors[c].g
 				colored_tile_data.modulate.b8 = colors[c].b
 		print("Created alternative tileset for COLOR %d" % [ c ])
-	var filename:String =  TARGET_PATH + "/DOSFont-%s.tres" % palette_name
+	var filename:String =  TARGET_PATH + "/DOSFont-%s-%s.tres" % [ palette_name, font_name ]
 	ResourceSaver.save(tileset, filename)
 	print("Created %s" % filename)

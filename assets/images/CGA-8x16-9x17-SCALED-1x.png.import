@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://h4xflqtauqxu"
-path="res://.godot/imported/Perfect DOS VGA 437_2.png-3a493a7cbbc72980297535c121ad9e02.ctex"
+uid="uid://dcr0rgdb3ccke"
+path="res://.godot/imported/CGA-8x16-9x17-SCALED-1x.png-289b9768357234223c92990eabbb0cfe.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Perfect DOS VGA 437_2.png"
-dest_files=["res://.godot/imported/Perfect DOS VGA 437_2.png-3a493a7cbbc72980297535c121ad9e02.ctex"]
+source_file="res://assets/images/CGA-8x16-9x17-SCALED-1x.png"
+dest_files=["res://.godot/imported/CGA-8x16-9x17-SCALED-1x.png-289b9768357234223c92990eabbb0cfe.ctex"]
 
 [params]
 

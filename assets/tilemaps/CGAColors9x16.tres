@@ -1,12 +1,11 @@
-[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://d4b687rujakbv"]
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://cpq7y1pe67e5i"]
 
-[ext_resource type="Texture2D" uid="uid://bwjn4mxfb3uoe" path="res://assets/CGA-FIXED.png" id="1_tll2h"]
+[ext_resource type="Texture2D" uid="uid://bsyuf7wjcnqol" path="res://assets/images/CGA-9x16-9x17-SCALED-1x.png" id="1_ah21h"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8itbn"]
 resource_name = "CGAColors"
-texture = ExtResource("1_tll2h")
-separation = Vector2i(1, 1)
-texture_region_size = Vector2i(8, 16)
+texture = ExtResource("1_ah21h")
+texture_region_size = Vector2i(9, 16)
 use_texture_padding = false
 0:0/0 = 0
 1:0/0 = 0
@@ -26,5 +25,5 @@ use_texture_padding = false
 15:0/0 = 0
 
 [resource]
-tile_size = Vector2i(8, 16)
+tile_size = Vector2i(9, 16)
 sources/0 = SubResource("TileSetAtlasSource_8itbn")
