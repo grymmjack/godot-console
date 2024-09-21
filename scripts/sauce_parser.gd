@@ -60,7 +60,7 @@ func parse_sauce(file_path: String) -> SauceData:
 	sauce_data.Author = data.get_string_from_ascii().substr(42, 20).strip_edges()
 	sauce_data.Group = data.get_string_from_ascii().substr(62, 20).strip_edges()
 	sauce_data.Date = data.get_string_from_ascii().substr(82, 8).strip_edges()
-	sauce_data.FileSize = bytes_to_int(data.slice(90, 94))  # 4 bytes for FileSize
+	sauce_data.FileSize = file_size
 	sauce_data.DataType = data[94]
 	sauce_data.FileType = data[95]
 	sauce_data.TInfo1 = bytes_to_int(data.slice(96, 98))  # 2 bytes for TInfo1
@@ -77,13 +77,13 @@ func parse_sauce(file_path: String) -> SauceData:
 		file.seek(comment_block_position)
 		var comment_id_data = file.get_buffer(5)
 		var comment_id_str = comment_id_data.get_string_from_ascii()
-		if comment_id_str == COMMENT_ID:
-			for i in range(sauce_data.Comments):
-				var comment_line_data = file.get_buffer(COMMENT_BLOCK_SIZE)
-				var comment_line = comment_line_data.get_string_from_ascii().strip_edges()
-				sauce_data.CommentLines.append(comment_line)
-		else:
-			print("Invalid comment block identifier.")
+		#if comment_id_str == COMMENT_ID:
+		for i in range(sauce_data.Comments):
+			var comment_line_data = file.get_buffer(COMMENT_BLOCK_SIZE)
+			var comment_line = comment_line_data.get_string_from_ascii().strip_edges()
+			sauce_data.CommentLines.append(comment_line)
+		#else:
+			#print("Invalid comment block identifier.")
 
 	file.close()
 	return sauce_data
@@ -91,5 +91,6 @@ func parse_sauce(file_path: String) -> SauceData:
 func bytes_to_int(bytes: PackedByteArray) -> int:
 	var result = 0
 	for i in range(bytes.size()):
-		result = (result << 8) + bytes[i]
+		#result = (result << 8) + bytes[i]
+		result += bytes[i]
 	return result

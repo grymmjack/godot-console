@@ -6,6 +6,7 @@
 
 [node name="SCREEN" type="Node" node_paths=PackedStringArray("background", "foreground")]
 script = ExtResource("4_exks7")
+rows = 50
 background_color = 1
 background = NodePath("BG")
 foreground = NodePath("FG")

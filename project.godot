@@ -24,9 +24,10 @@ config/icon="res://icon.svg"
 [display]
 
 window/size/viewport_width=640
-window/size/viewport_height=400
-window/stretch/mode="viewport"
+window/size/viewport_height=480
+window/subwindows/embed_subwindows=false
 window/stretch/scale_mode="integer"
+window/handheld/orientation=1
 
 [rendering]
 

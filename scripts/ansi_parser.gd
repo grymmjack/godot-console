@@ -41,14 +41,14 @@ const GFX_STRIKEOUT       := "9m"
 # FOREGROUND COLORS
 const COLOR_RESET         := "0m"
 const COLOR_FG_DEFAULT    := "39m"
-const COLOR_FG_BLACK      := "0;30" #ok
-const COLOR_FG_BLUE       := "0;34" #1
-const COLOR_FG_GREEN      := "0;32" #ok
-const COLOR_FG_CYAN       := "0;36" #3
-const COLOR_FG_RED        := "0;31" #4
-const COLOR_FG_MAGENTA    := "0;35" #ok
-const COLOR_FG_BROWN      := "0;33" #6
-const COLOR_FG_WHITE      := "0;37" #ok
+const COLOR_FG_BLACK      := "0;30"
+const COLOR_FG_BLUE       := "0;34"
+const COLOR_FG_GREEN      := "0;32"
+const COLOR_FG_CYAN       := "0;36"
+const COLOR_FG_RED        := "0;31"
+const COLOR_FG_MAGENTA    := "0;35"
+const COLOR_FG_BROWN      := "0;33"
+const COLOR_FG_WHITE      := "0;37"
 const COLOR_FG_GRAY       := "1;30"
 const COLOR_FG_BR_BLUE    := "1;34"
 const COLOR_FG_BR_GREEN   := "1;32"
@@ -132,6 +132,7 @@ func parse_ansi(data: PackedByteArray):
 			else:
 				# Draw character
 				echo(ASCII_UNICODE[char_code])
+				#echo(String.chr(char_code))
 
 func process_ansi_sequence(seq):
 	#if '43m' in seq:
@@ -198,10 +199,10 @@ func process_sgr(params):
 				# Bold on (bright foreground)
 				foreground_color += 8
 				bright = true
-			22:
+			#22:
 				 #Bold off
-				if foreground_color >= 8:
-					foreground_color -= 8
+				#if foreground_color >= 8:
+					#foreground_color -= 8
 			5:
 				 #Blink on
 				blink = true
@@ -337,99 +338,6 @@ func swap_colors():
 	current_bg_color = temp
 	update_console_color()
 
-const SAUCE_ID := "SAUCE"
-const SAUCE_VERSION := "00"
-
-# SAUCE record structure sizes
-const SAUCE_RECORD_SIZE := 128
-const COMMENT_BLOCK_SIZE := 64
-const COMMENT_ID := "COMNT"
-
-# SAUCE data structure
-class SauceData:
-	var ID: String = ""
-	var Version: String = ""
-	var Title: String = ""
-	var Author: String = ""
-	var Group: String = ""
-	var Date: String = ""
-	var FileSize: int = 0
-	var DataType: int = 0
-	var FileType: int = 0
-	var TInfo1: int = 0
-	var TInfo2: int = 0
-	var TInfo3: int = 0
-	var TInfo4: int = 0
-	var Comments: int = 0
-	var Flags: int = 0
-	var Filler: String = ""
-	var CommentLines: Array = []
-
-func parse_sauce(file_path: String) -> SauceData:
-	var _sauce_data = SauceData.new()
-	var file = FileAccess.open(file_path, FileAccess.READ)
-
-	if !file:
-		print("Failed to open file: %s" % file_path)
-		return null
-
-	var file_size = file.get_length()
-	if file_size < SAUCE_RECORD_SIZE:
-		# File is too small to contain SAUCE record
-		file.close()
-		return null
-
-	# Seek to potential SAUCE record position
-	file.seek(file_size - SAUCE_RECORD_SIZE)
-	var data = file.get_buffer(SAUCE_RECORD_SIZE)
-	var data_str = data.get_string_from_ascii()
-
-	if not data_str.begins_with(SAUCE_ID):
-		# No SAUCE record found
-		file.close()
-		return null
-
-	# Parse SAUCE record
-	_sauce_data.ID = data.get_string_from_ascii().substr(0, 5)
-	_sauce_data.Version = data.get_string_from_ascii().substr(5, 2)
-	_sauce_data.Title = data.get_string_from_ascii().substr(7, 35).strip_edges()
-	_sauce_data.Author = data.get_string_from_ascii().substr(42, 20).strip_edges()
-	_sauce_data.Group = data.get_string_from_ascii().substr(62, 20).strip_edges()
-	_sauce_data.Date = data.get_string_from_ascii().substr(82, 8).strip_edges()
-	_sauce_data.FileSize = bytes_to_int(data.slice(90, 94))  # 4 bytes for FileSize
-	_sauce_data.DataType = data[94]
-	_sauce_data.FileType = data[95]
-	_sauce_data.TInfo1 = bytes_to_int(data.slice(96, 98))  # 2 bytes for TInfo1
-	_sauce_data.TInfo2 = bytes_to_int(data.slice(98, 100))  # 2 bytes for TInfo2
-	_sauce_data.TInfo3 = bytes_to_int(data.slice(100, 102))  # 2 bytes for TInfo3
-	_sauce_data.TInfo4 = bytes_to_int(data.slice(102, 104))  # 2 bytes for TInfo4
-	_sauce_data.Comments = data[104]
-	_sauce_data.Flags = data[105]
-	_sauce_data.Filler = data.get_string_from_ascii().substr(106, 22)
-
-	# Parse comments if any
-	if _sauce_data.Comments > 0:
-		var comment_block_position = file_size - SAUCE_RECORD_SIZE - (COMMENT_BLOCK_SIZE * _sauce_data.Comments)
-		file.seek(comment_block_position)
-		var comment_id_data = file.get_buffer(5)
-		var comment_id_str = comment_id_data.get_string_from_ascii()
-		if comment_id_str == COMMENT_ID:
-			for i in range(_sauce_data.Comments):
-				var comment_line_data = file.get_buffer(COMMENT_BLOCK_SIZE)
-				var comment_line = comment_line_data.get_string_from_ascii().strip_edges()
-				_sauce_data.CommentLines.append(comment_line)
-		else:
-			print("Invalid comment block identifier.")
-
-	file.close()
-	return _sauce_data
-
-func bytes_to_int(bytes: PackedByteArray) -> int:
-	var result = 0
-	for i in range(bytes.size()):
-		result = (result << 8) + bytes[i]
-	return result
-
 var sauce_data: SauceParser.SauceData = null
 func load_ansi_file(file_path: String) -> void:
 	var sauce_parser = SauceParser.new()
@@ -440,7 +348,7 @@ func load_ansi_file(file_path: String) -> void:
 		var content_length = file.get_length()
 		if sauce_data != null:
 			# Exclude SAUCE record and comments from content
-			content_length -= (SAUCE_RECORD_SIZE + (COMMENT_BLOCK_SIZE * sauce_data.Comments)) + 1
+			content_length -= sauce_parser.SAUCE_RECORD_SIZE + (sauce_parser.COMMENT_BLOCK_SIZE * sauce_data.Comments) + 1
 		var content:PackedByteArray
 		for i:int in range(content_length):
 			content.append(file.get_8())
