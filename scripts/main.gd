@@ -1,14 +1,32 @@
 @icon("res://icon.svg")
 class_name TextScreen
-extends TextConsole
+extends AnsiParser
 
 func _ready() -> void:
 	#create_colored_tiles(CGA_PALETTE, BASE_TILESET, BASE_FONT_TEXTURE, "DOS 8x16", "CGA")
 	color(CGA.BRIGHT_WHITE, CGA.BLUE)
 	cls()
-	print_ruler()
-	locate(10, 2)
-	cecho("    Hello, World!    ", 14, 4)
+	#print_ruler()
+	#locate(10, 2)
+	#cecho("    Hello, World!    ", 14, 4)
+	load_ansi_file("res://assets/gj-test-4.ans")
+	#if sauce_data != null:
+		## Display metadata at the top of the console
+		#locate(0, 0)
+		#color(CGA.BRIGHT_WHITE, CGA.BLACK)
+		#echo("Title: %s" % sauce_data.Title)
+		#locate(0, 1)
+		#echo("Author: %s" % sauce_data.Author)
+		#locate(0, 2)
+		#echo("Group: %s" % sauce_data.Group)
+		#locate(0, 3)
+		#echo("Date: %s" % sauce_data.Date)
+
+func _input(event):
+	if event is InputEventKey:
+		print(OS.get_keycode_string(event.keycode))
+		if OS.get_keycode_string(event.keycode) == "Escape":
+			get_tree().quit()
 
 # print a little ruler
 func print_ruler() -> void:

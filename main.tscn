@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://cdh6pa166pfpb"]
 
 [ext_resource type="TileSet" uid="uid://d4b687rujakbv" path="res://assets/CGAColors.tres" id="2_756jj"]
-[ext_resource type="TileSet" uid="uid://b5nwa7q7fqth7" path="res://assets/DOSFont-CGA.tres" id="3_5sp2r"]
+[ext_resource type="TileSet" uid="uid://c0lfvttajh5tm" path="res://assets/DOSFont-CGA.tres" id="3_5sp2r"]
 [ext_resource type="Script" path="res://scripts/main.gd" id="4_exks7"]
 
 [node name="SCREEN" type="Node" node_paths=PackedStringArray("background", "foreground")]
