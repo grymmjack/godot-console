@@ -131,8 +131,9 @@ func parse_ansi(data: PackedByteArray):
 				_set_cursor_position(Vector2i(0, cursor_position.y))
 			else:
 				# Draw character
-				echo("A")
-				echo(String.chr(char_code))
+				#print(ASCII_UNICODE[char_code])
+				#var char_to_echo:String = String.chr(char_code)
+				echo(ASCII_UNICODE[char_code])
 
 func process_ansi_sequence(seq):
 	if seq == '':
@@ -161,22 +162,22 @@ func process_ansi_sequence(seq):
 			process_cursor_position(params_int)
 		'A':
 			# Cursor up
-			process_cursor_up(params_int)
+			cursor_up(params_int)
 		'B':
 			# Cursor down
-			process_cursor_down(params_int)
+			cursor_down(params_int)
 		'C':
 			# Cursor forward
-			process_cursor_forward(params_int)
+			cursor_right(params_int)
 		'D':
 			# Cursor backward
-			process_cursor_backward(params_int)
-		's':
+			cursor_left(params_int)
+		#'s':
 			# Save cursor position
-			save_cursor_position()
-		'u':
+			#save_cursor_position()
+		#'u':
 			# Restore cursor position
-			restore_cursor_position()
+			#restore_cursor_position()
 		# Add other commands as needed
 		_:
 			# Unhandled command
@@ -189,8 +190,8 @@ func process_sgr(params):
 		match p:
 			0:
 				# Reset all attributes
-				foreground_color = 7  # Default foreground
-				background_color = 0  # Default background
+				foreground_color = CGA.WHITE  # Default foreground
+				background_color = CGA.BLACK  # Default background
 				#blink = false
 			1:
 				# Bold on (bright foreground)
@@ -223,6 +224,7 @@ func process_sgr(params):
 				# Unhandled SGR code
 				pass
 
+# Cursor movement functions
 func process_cursor_position(params):
 	var row = 1
 	var col = 1
@@ -233,37 +235,6 @@ func process_cursor_position(params):
 	# ANSI positions are 1-based, but our x and y are 0-based
 	locate(col, row)
 
-func process_cursor_up(params):
-	var n = 1
-	if params.size() >= 1 and params[0] != '':
-		n = params[0]
-	set_cursor_position(Vector2i(get_cursor_position().x, get_cursor_position().y - n))
-
-func process_cursor_down(params):
-	var n = 1
-	if params.size() >= 1 and params[0] != '':
-		n = params[0]
-	set_cursor_position(Vector2i(get_cursor_position().x, get_cursor_position().y + n))
-
-func process_cursor_forward(params):
-	var n = 1
-	if params.size() >= 1 and params[0] != '':
-		n = params[0]
-	set_cursor_position(Vector2i(get_cursor_position().x + n, get_cursor_position().y))
-
-func process_cursor_backward(params):
-	var n = 1
-	if params.size() >= 1 and params[0] != '':
-		n = params[0]
-	set_cursor_position(Vector2i(get_cursor_position().x - n, get_cursor_position().y))
-
-func save_cursor_position():
-	pass
-
-func restore_cursor_position():
-	pass
-
-# Cursor movement functions
 func cursor_home(params: Array):
 	var row = int(params[0]) - 1 if (params.size() > 0) else 0
 	var col = int(params[1]) - 1 if (params.size() > 1) else 0
@@ -527,7 +498,7 @@ func load_ansi_file(file_path: String) -> void:
 			content.append(file.get_8())
 		#var content = file.get_as_text()
 		file.close()
-		breakpoint
+		#breakpoint
 		parse_ansi(content)
 	else:
 		print("Failed to open file: %s" % file_path)

@@ -213,25 +213,26 @@ func csrlin() -> int:
 # echo a string print using current colors
 func echo(_str:String) -> void:
 	is_printing.emit(_str)
-	var _position = cursor_position
 	for i in len(_str):
 		var cha:String = _str[i]
 		var tile:Vector2i = cha_to_atlas_coord(cha)
-		bg(Vector2i(_position.x+i, _position.y), background_color)
-		fg(Vector2i(_position.x+i, _position.y), foreground_color, tile)
-		_set_cursor_position(Vector2i(_position.x+i, _position.y))
-
+		bg(Vector2i(cursor_position.x, cursor_position.y), background_color)
+		fg(Vector2i(cursor_position.x, cursor_position.y), foreground_color, tile)
+		var new_x:int = cursor_position.x + 1
+		var new_y:int = cursor_position.y
+		locate(new_x, new_y)
 
 # echo a string (synonymous with print, but prints in colors)
 func cecho(_str:String, fg_color:int, bg_color:int) -> void:
 	is_printing.emit(_str)
-	var _position = cursor_position
 	for i in len(_str):
 		var cha:String = _str[i]
 		var tile:Vector2i = cha_to_atlas_coord(cha)
-		bg(Vector2i(_position.x+i, _position.y), bg_color)
-		fg(Vector2i(_position.x+i, _position.y), fg_color, tile)
-		_set_cursor_position(Vector2i(_position.x+i, _position.y))
+		bg(Vector2i(cursor_position.x, cursor_position.y), bg_color)
+		fg(Vector2i(cursor_position.x, cursor_position.y), fg_color, tile)
+		var new_x:int = cursor_position.x + 1
+		var new_y:int = cursor_position.y
+		locate(new_x, new_y)
 
 # set background color using %BG tilemap layer
 func bg(_position:Vector2i, _color:int) -> void:
@@ -244,11 +245,13 @@ func fg(_position:Vector2i, _color:int, _tile:Vector2i) -> void:
 	color_changed.emit()
 	fg_color_changed.emit()
 	#set_cell(coords: Vector2i, source_id: int = -1, atlas_coords: Vector2i = Vector2i(-1, -1), alternative_tile: int = 0)
-	%FG.set_cell(_position, FG_ATLAS_ID, _tile, _color + CGA_PALETTE.size())
+	var alternative_tile:int = _color + CGA_PALETTE.size()
+	var source_id:int = FG_ATLAS_ID
+	%FG.set_cell(_position, source_id, _tile, alternative_tile)
 
 # map character to font atlas
 func cha_to_atlas_coord(cha:String) -> Vector2i:
-	var cha_ord:int = cha.unicode_at(0)
+	var cha_ord:int = ASCII_UNICODE.find(cha) if cha in ASCII_UNICODE else cha.unicode_at(0)
 	if cha_ord == 27:
 		ansi_detected.emit()
 	@warning_ignore("integer_division")
@@ -258,16 +261,17 @@ func cha_to_atlas_coord(cha:String) -> Vector2i:
 
 # screen wrap update
 func screen_wrap() -> void:
-	if cursor_position.y > rows:
+	if cursor_position.y >= rows:
 		cursor_position.y = rows
 		screen_scroll_down()
-	if cursor_position.x > columns:
+	if cursor_position.x >= columns:
 		cursor_position.y += 1
 		cursor_position.x = 0
 
 func _set_cursor_position(_position:Vector2i) -> void:
 	cursor_moving.emit(_position, cursor_position)
 	cursor_position = _position
+	screen_wrap()
 
 # TODO
 func screen_scroll_down() -> void:
