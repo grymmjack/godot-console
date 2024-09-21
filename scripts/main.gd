@@ -23,8 +23,8 @@ func _ready() -> void:
 	#echo("Hello, World!")
 	#echo("Hello, World!")
 	load_ansi_file("res://assets/gj-test1.ans")
-	locate(0, 20)
-	echo("Hi")
+	#locate(0, 20)
+	#echo("Hi")
 	#echo("A")
 	#if sauce_data != null:
 		## Display metadata at the top of the console

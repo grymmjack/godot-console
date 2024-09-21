@@ -134,6 +134,8 @@ func parse_ansi(data: PackedByteArray):
 				echo(ASCII_UNICODE[char_code])
 
 func process_ansi_sequence(seq):
+	#if '43m' in seq:
+		#breakpoint
 	if seq == '':
 		return
 	var final_char = seq[seq.length() - 1]
@@ -190,34 +192,35 @@ func process_sgr(params):
 				# Reset all attributes
 				foreground_color = CGA.WHITE  # Default foreground
 				background_color = CGA.BLACK  # Default background
-				_bright = false
-				#blink = false
+				bright = false
+				blink = false
 			1:
 				# Bold on (bright foreground)
-				#foreground_color += 8
-				_bright = true
-			#22:
-				# Bold off
-				#if foreground_color >= 8:
-					#foreground_color -= 8
-			#5:
-				# Blink on
-				#blink = true
-			#25:
-				# Blink off
-				#blink = false
+				foreground_color += 8
+				bright = true
+			22:
+				 #Bold off
+				if foreground_color >= 8:
+					foreground_color -= 8
+			5:
+				 #Blink on
+				blink = true
+				bright = true
+			25:
+				 #Blink off
+				blink = false
 			p when (p >= 30 and p <= 37):
 				# Set foreground color
-				foreground_color = p - 30 if !_bright else p - 30 + 8
-			p when (p >= 90 and p <= 97):
-				# Set bright foreground color
-				foreground_color = p - 90
+				foreground_color = p - 30 if !bright else p - 30 + 8
 			p when (p >= 40 and p <= 47):
 				# Set background color
-				background_color = p - 40 if !_bright else p - 40 + 8
+				background_color = p - 40# if !bright else p - 40 + 8
+			p when (p >= 90 and p <= 97):
+				# Set bright foreground color
+				foreground_color = p - 90 if !bright else p - 90 + 8
 			p when (p >= 100 and p <= 107):
 				# Set bright background color
-				background_color = p - 100
+				background_color = p - 100 if !bright else p - 100 + 8
 			# Add other attributes if needed
 			_:
 				# Unhandled SGR code

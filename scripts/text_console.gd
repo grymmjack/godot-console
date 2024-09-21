@@ -30,7 +30,8 @@ signal ansi_detected
 @export var foreground:TileMapLayer
 
 static var _scrollback_buffer:Array[TextChar]
-static var _bright:bool = false
+var bright:bool = false
+var blink:bool = true
 
 enum VERTICAL_DIRECTION { DOWN, UP }
 enum HORIZONTAL_DIRECTION { LEFT, RIGHT }
