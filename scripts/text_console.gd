@@ -37,6 +37,7 @@ var bold:bool = false
 var blinking:bool = false
 var inverted:bool = false
 var ice_color:bool = false
+var utf8_ans:bool = false
 
 enum VERTICAL_DIRECTION { DOWN, UP }
 enum HORIZONTAL_DIRECTION { LEFT, RIGHT }
@@ -383,7 +384,8 @@ func inkey() -> String:
 	return ""
 
 func _unhandled_key_input(event: InputEvent) -> void:
-	print(event.as_text())
+	#print(event.as_text())
+	pass
 
 
 # Create colored tile alternates
@@ -409,3 +411,33 @@ func create_colored_tiles(colors, base_tileset:TileSet, font_name:String, palett
 	var filename:String =  TARGET_PATH + "/DOSFont-%s-%s.tres" % [ palette_name, font_name ]
 	ResourceSaver.save(tileset, filename)
 	print("Created %s" % filename)
+
+func bytes_to_str8(bytes:PackedByteArray) -> String:
+	var result:String = ""
+	for i in range(bytes.size()):
+		result += String.chr(bytes[i])
+	return result
+
+func bytes_to_int(bytes:PackedByteArray) -> int:
+	var result:int = 0
+	for i in range(bytes.size()):
+		result |= (bytes[i] & 0xFF) << (8 * i)
+	return result
+
+func packedbyearray_to_string_utf8(_input:PackedByteArray) -> String:
+	var ret:String = ""
+	for i:int in range(_input.size()):
+		if _input[i] != 27:
+			ret += ASCII_UNICODE[_input[i]]
+		else:
+			ret += String.chr(27)
+	return ret
+
+func utf8_to_string8(_input:String) -> String:
+	var ret:String = ""
+	for i:int in range(len(_input)):
+		if _input[i] != String.chr(27):
+			ret += String.chr(UNICODE_ASCII[_input[i]])
+		else:
+			ret += String.chr(27)
+	return ret

@@ -1,3 +1,9 @@
+# ANSI Text Parser for Godot 4
+# This is the SCREEN (TextScreen) which can show ANSI art and use text mode
+#
+# @author Rick Christy <grymmjack@gmail.com>
+# @requires Godot 4.3+
+
 @icon("res://icon.svg")
 class_name TextScreen
 extends AnsiParser
@@ -15,18 +21,22 @@ func _ready() -> void:
 	#cecho(msg, 14, 4)
 	#await inkey()
 	#await Input
+
+	# the below are just test files
+
 	#load_ansi_file("res://assets/ANSIs/Giant Rat.gif-50.ans") # 33x25 - 8x8 font
 	#load_ansi_file("res://assets/ANSIs/filth - Blackalicious - Blazing Arrow - MoebiusXBIN GJ.ans")
 	#load_ansi_file("res://assets/ANSIs/bobafett.png-25-noice.ans") # 320x100
 	#load_ansi_file("res://assets/ANSIs/bobafett.png-25-noice.ans") # 320x100
 	#load_ansi_file("res://assets/ANSIs/bacsi-img2pal.png-25-OPT.ans") # 320x100
 	#load_ansi_file("res://assets/ANSIs/akbar.png-25-moebius.ans")
-	#load_ansi_file("res://assets/ANSIs/gj-test1.ans")
+	load_ansi_file("res://assets/ANSIs/gj-test1.ans")
 	#load_ansi_file("res://assets/ANSIs/gj-test2.ans")
 	#load_ansi_file("res://assets/ANSIs/MB4K.ans")
 	#load_ansi_file("res://assets/ANSIs/anst-moebius.ans")
 	#load_ansi_file("res://assets/ANSIs/acknowledgements.ans")
-	load_ansi_file("res://assets/ANSIs/gj-jorge-test.ans")
+	#load_ansi_file("res://assets/ANSIs/MB4K.utf8ans")
+	#load_ansi_file("res://assets/ANSIs/gj-jorge-test.ans")
 	#load_ansi_file("res://assets/ANSIs/stormtrooper-pixel-art.png-25.ans")
 	#load_ansi_file("res://assets/ANSIs/stormtrooper-pixel-art.png-25-OPT.ans")
 	load_ansi_file("res://assets/ANSIs/gj-fuel2.ans")

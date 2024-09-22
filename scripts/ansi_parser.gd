@@ -1,50 +1,31 @@
+# ANSI Text Parser for Godot 4
+# @author Rick Christy <grymmjack@gmail.com>
+# @requires Godot 4.3+
+
 class_name AnsiParser
 extends TextConsole
 
-const ESC := 27
-const CSI := "%c[" % ESC
+var sauce_data:SauceParser.SauceData = null
 
-# Initialize default colors
-var current_fg_color:int = CGA.WHITE
-var current_bg_color:int = CGA.BLACK
-
-func packedbyearray_to_string_utf8(_input:PackedByteArray) -> String:
-	var ret:String = ""
-	for i:int in range(_input.size()):
-		if _input[i] != 27:
-			ret += ASCII_UNICODE[_input[i]]
-		else:
-			ret += String.chr(27)
-	return ret
-
-func utf8_to_string8(_input:String) -> String:
-	var ret:String = ""
-	for i:int in range(len(_input)):
-		if _input[i] != String.chr(27):
-			ret += String.chr(UNICODE_ASCII[_input[i]])
-		else:
-			ret += String.chr(27)
-	return ret
-
-func parse_ansi(data: PackedByteArray):
+func parse_ansi(data:PackedByteArray):
 	# Process data
-	var data_length = data.size()
-	var i = 0
+	var data_length:int = data.size()
+	var i:int = 0
 	while i < data_length:
-		var char_code = data[i]
+		var char_code:int = data[i]
 		i += 1
 
 		if char_code == 27:  # ESC character
 			if i >= data_length:
 				break  # End of data
-			var next_char = data[i]
+			var next_char:int = data[i]
 			i += 1
-			if next_char == '['.unicode_at(0):
+			if next_char == "[".unicode_at(0):
 				# Start of CSI sequence
-				var ansi_sequence = ''
+				var ansi_sequence:String = ""
 				# Read characters until we find a letter between '@' (64) and '~' (126)
 				while i < data_length:
-					var c = data[i]
+					var c:int = data[i]
 					i += 1
 					ansi_sequence += String.chr(c)
 					if c >= 64 and c <= 126:
@@ -59,14 +40,16 @@ func parse_ansi(data: PackedByteArray):
 				_set_cursor_position(Vector2i(0, cursor_position.y))
 			else:
 				# Draw character
-				echo(ASCII_UNICODE[char_code])
-				#echo(String.chr(char_code))
+				if !utf8_ans:
+					echo(ASCII_UNICODE[char_code])
+				else:
+					echo(String.chr(ASCII_UNICODE.find(char_code)))
 
-func process_ansi_sequence(seq):
+func process_ansi_sequence(seq:String):
 	if seq == '':
 		return
-	var final_char = seq[seq.length() - 1]
-	var params_str = seq.substr(0, seq.length() - 1)
+	var final_char:String = seq[seq.length() - 1]
+	var params_str:String = seq.substr(0, seq.length() - 1)
 	var params = []
 	if params_str != '':
 		params = params_str.split(';')
@@ -74,11 +57,11 @@ func process_ansi_sequence(seq):
 		params = ['0']  # Default parameter
 
 	# Convert parameters to integers
-	var params_int = []
-	for p in params:
+	var params_int:Array[int] = []
+	for p:String in params:
 		if p == '':
 			p = '0'
-		var n = int(p)
+		var n:int = int(p)
 		params_int.append(n)
 
 	# Now handle the command based on final_char
@@ -106,10 +89,10 @@ func process_ansi_sequence(seq):
 			# Unhandled command
 			pass
 
-func process_sgr(params):
+func process_sgr(params:Array[int]):
 	if params.size() == 0:
 		params = [0]
-	for p in params:
+	for p:int in params:
 		match p:
 			0: # Reset all attributes
 				foreground_color = CGA.WHITE  # Default foreground
@@ -144,9 +127,7 @@ func process_sgr(params):
 				if bold:
 					foreground_color += 8
 			38: # 256 color foreground - not yet supported
-				var r:int = params[1]
-				var g:int = params[2]
-				var b:int = params[3]
+				foreground_color = params[2]
 			39: # Set default foreground color
 				foreground_color = CGA.WHITE
 			40,41,42,43,44,45,46,47: # Set background color
@@ -154,9 +135,7 @@ func process_sgr(params):
 				if blinking:
 					background_color += 8
 			48: # 256 color background - not yet supported
-				var r:int = params[1]
-				var g:int = params[2]
-				var b:int = params[3]
+				background_color = params[2]
 			49: # Set default background color
 				background_color = CGA.BLACK
 			90,91,92,93,94,95,96,97: # Set high intensity foreground color
@@ -176,7 +155,6 @@ func process_cursor_position(params):
 		row = params[0]
 	if params.size() >= 2 and params[1] != '':
 		col = params[1]
-	# ANSI positions are 1-based, but our x and y are 0-based
 	locate(col, row)
 
 func cursor_home(params: Array):
@@ -225,19 +203,15 @@ func erase_line(params: Array):
 
 func clear_line(line_index: int):
 	for x in range(columns):
-		bg(Vector2i(x, line_index), current_bg_color)
-		fg(Vector2i(x, line_index), current_fg_color, cha_to_atlas_coord(" "))
+		bg(Vector2i(x, line_index), background_color)
+		fg(Vector2i(x, line_index), foreground_color, cha_to_atlas_coord(" "))
 
 func reset_styles():
 	reset_colors()
 
 func reset_colors():
-	current_fg_color = CGA.WHITE
-	current_bg_color = CGA.BLACK
-	update_console_color()
-
-func update_console_color():
-	color(current_fg_color, current_bg_color)
+	foreground_color = CGA.WHITE
+	background_color = CGA.BLACK
 
 func move_cursor(delta: Vector2i):
 	cursor_position += delta
@@ -267,13 +241,12 @@ func set_underline(enabled: bool):
 	pass
 
 func swap_colors():
-	var temp = current_fg_color
-	current_fg_color = current_bg_color
-	current_bg_color = temp
-	update_console_color()
+	var temp = foreground_color
+	foreground_color = background_color
+	background_color = temp
 
-var sauce_data: SauceParser.SauceData = null
 func load_ansi_file(file_path: String) -> void:
+	utf8_ans = ".utf8ans" in file_path
 	var sauce_parser = SauceParser.new()
 	var content_length:int = 0
 	sauce_data = sauce_parser.parse_sauce(file_path)

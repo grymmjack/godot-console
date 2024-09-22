@@ -1,3 +1,9 @@
+# Sauce Parser for Godot 4
+# @see https://www.acid.org/info/sauce/sauce.htm
+#
+# @author Rick Christy <grymmjack@gmail.com>
+# @requires Godot 4.3+
+
 class_name SauceParser
 extends TextConsole
 
@@ -87,15 +93,3 @@ func parse_sauce(file_path: String) -> SauceData:
 
 	file.close()
 	return sauce_data
-
-func bytes_to_str8(bytes:PackedByteArray) -> String:
-	var result:String = ""
-	for i in range(bytes.size()):
-		result += String.chr(bytes[i])
-	return result
-
-func bytes_to_int(bytes:PackedByteArray) -> int:
-	var result:int = 0
-	for i in range(bytes.size()):
-		result |= (bytes[i] & 0xFF) << (8 * i)
-	return result
