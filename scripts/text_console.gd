@@ -22,7 +22,7 @@ enum SCREEN_MODE { FONT_8x8, FONT_8x16, FONT_9x16 }
 @export_group("Screen")
 @export var rows:int = 25
 @export var columns:int = 80
-@export_enum(SCREEN_MODE_8x8, SCREEN_MODE_8x16, SCREEN_MODE_9x16) var screen_mode: set = setup_screen_mode
+@export_enum(SCREEN_MODE_8x8, SCREEN_MODE_8x16, SCREEN_MODE_9x16) var screen_mode = SCREEN_MODE_8x16: set = setup_screen_mode
 @export var scale:int = 1
 @export var scrollback_size:int = 1000
 @export_group("Colors")
@@ -62,8 +62,8 @@ const TARGET_PATH:String = "res://assets/tilemaps"
 const BG_ATLAS_ID := 0
 const FG_ATLAS_ID := 0
 
-var character_width:int
-var character_height:int
+var character_width:int = 8
+var character_height:int = 16
 
 var CGA_COLOR := {
 	"BLACK": 0,
@@ -206,13 +206,11 @@ func _ready() -> void:
 	is_ready.emit()
 
 func setup_window() -> void:
-	var _width:int = columns * 8 * scale
-	var _height:int = rows * 16 * scale
-	get_window().size = Vector2i(_width, _height)
+	get_window().size = Vector2i(character_width * columns, character_height * rows) * scale
 	get_window().content_scale_aspect = Window.CONTENT_SCALE_ASPECT_KEEP
 	get_window().content_scale_factor = scale
 	get_window().content_scale_mode = Window.CONTENT_SCALE_MODE_VIEWPORT
-	get_window().content_scale_size = Vector2i(_width, _height)
+	get_window().content_scale_size = Vector2i(character_width * columns, character_height * rows) * scale
 
 func setup_screen_mode(mode:int) -> void:
 	if !is_inside_tree():
@@ -227,14 +225,20 @@ func setup_screen_mode(mode:int) -> void:
 		SCREEN_MODE.FONT_8x8:
 			%BG_8x8.show()
 			%FG_8x8.show()
+			character_width = 8
+			character_height = 8
 			screen_mode = SCREEN_MODE.FONT_8x8
 		SCREEN_MODE.FONT_8x16:
 			%BG_8x16.show()
 			%FG_8x16.show()
+			character_width = 8
+			character_height = 16
 			screen_mode = SCREEN_MODE.FONT_8x16
 		SCREEN_MODE.FONT_9x16:
 			%BG_9x16.show()
 			%FG_9x16.show()
+			character_width = 9
+			character_height = 16
 			screen_mode = SCREEN_MODE.FONT_9x16
 
 # clear screen
@@ -255,6 +259,27 @@ func color(fg_color:int, bg_color:int) -> void:
 # set cursor position
 func locate(x:int, y:int) -> void:
 	_set_cursor_position(Vector2i(x, y))
+
+func locate_center(msg:String, row:int = -1) -> void:
+	if row >= 0:
+		@warning_ignore("integer_division")
+		locate(int((columns - len(msg)) / 2), row)
+	else:
+		@warning_ignore("integer_division")
+		locate(int((columns - len(msg)) / 2), cursor_position.y)
+
+@warning_ignore("unused_parameter")
+func locate_left(msg:String, row:int = -1) -> void:
+	if row >= 0:
+		locate(0, row)
+	else:
+		locate(0, cursor_position.y)
+
+func locate_right(msg:String, row:int = -1) -> void:
+	if row >= 0:
+		locate(columns - len(msg), row)
+	else:
+		locate(columns - len(msg), cursor_position.y)
 
 # get cursor x position (column)
 func pos(type:int = 0) -> int:
@@ -353,7 +378,14 @@ func input(prompt:String) -> String:
 # TODO
 func inkey() -> String:
 	awaiting_input.emit()
+	#var keypress:Key
+	#while keypress == null:
+		#print("waiting")
 	return ""
+
+func _unhandled_key_input(event: InputEvent) -> void:
+	print(event.as_text())
+
 
 # Create colored tile alternates
 # thank you to Selina - https://github.com/SelinaDev/

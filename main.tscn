@@ -11,7 +11,7 @@
 [node name="SCREEN" type="Node" node_paths=PackedStringArray("background", "foreground")]
 script = ExtResource("4_exks7")
 rows = 50
-screen_mode = 2
+scale = 2
 background_color = 1
 background = NodePath("BG_8x8")
 foreground = NodePath("FG_8x8")
@@ -24,14 +24,6 @@ tile_set = ExtResource("2_au7dh")
 unique_name_in_owner = true
 tile_set = ExtResource("3_7kr8r")
 
-[node name="BG_8x16" type="TileMapLayer" parent="."]
-unique_name_in_owner = true
-tile_set = ExtResource("2_756jj")
-
-[node name="FG_8x16" type="TileMapLayer" parent="."]
-unique_name_in_owner = true
-tile_set = ExtResource("3_qr6g2")
-
 [node name="BG_9x16" type="TileMapLayer" parent="."]
 unique_name_in_owner = true
 tile_set = ExtResource("6_76aeg")
@@ -39,3 +31,11 @@ tile_set = ExtResource("6_76aeg")
 [node name="FG_9x16" type="TileMapLayer" parent="."]
 unique_name_in_owner = true
 tile_set = ExtResource("7_y7y4u")
+
+[node name="BG_8x16" type="TileMapLayer" parent="."]
+unique_name_in_owner = true
+tile_set = ExtResource("2_756jj")
+
+[node name="FG_8x16" type="TileMapLayer" parent="."]
+unique_name_in_owner = true
+tile_set = ExtResource("3_qr6g2")

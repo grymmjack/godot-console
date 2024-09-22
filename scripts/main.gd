@@ -9,12 +9,16 @@ func _ready() -> void:
 	#get_tree().quit(0)
 	#color(CGA.BRIGHT_WHITE, CGA.BLUE)
 	#cls()
-	#print_ruler()
-	#locate(79, 0)
-	#cecho("Hello, World!", 14, 4)
-	#load_ansi_file("res://assets/stormtrooper-pixel-art.png-25-OPT.ans")
-	load_ansi_file("res://assets/ANSIs/gj-fuel2.ans")
-	#load_ansi_file("res://assets/gj-fuel2-8x14.ans")
+	##print_ruler()
+	#var msg:String = "Hello, World!"
+	#locate_center(msg, int(rows/2))
+	#cecho(msg, 14, 4)
+	#await inkey()
+	#await Input
+	load_ansi_file("res://assets/ANSIs/stormtrooper-pixel-art.png-25.ans")
+	#load_ansi_file("res://assets/ANSIs/stormtrooper-pixel-art.png-25-OPT.ans")
+	#load_ansi_file("res://assets/ANSIs/gj-fuel2.ans")
+	#load_ansi_file("res://assets/ANSIs/gj-fuel2-8x14.ans")
 	#locate(0, 50)
 	#echo("Hi")
 	#echo("A")
@@ -32,7 +36,7 @@ func _ready() -> void:
 
 func _input(event):
 	if event is InputEventKey:
-		print(OS.get_keycode_string(event.keycode))
+		#print(OS.get_keycode_string(event.keycode))
 		if OS.get_keycode_string(event.keycode) == "Escape":
 			get_tree().quit()
 

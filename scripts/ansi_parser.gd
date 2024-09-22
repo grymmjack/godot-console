@@ -4,81 +4,10 @@ extends TextConsole
 const ESC := 27
 const CSI := "%c[" % ESC
 
-# CURSOR
-const CURSOR_HOME         := "H"
-const CURSOR_MOVE1        := "H"
-const CURSOR_MOVE2        := "f"
-const CURSOR_UP           := "A"
-const CURSOR_DOWN         := "B"
-const CURSOR_RIGHT        := "C"
-const CURSOR_LEFT         := "D"
-const CURSOR_COL0_DOWN    := "E"
-const CURSOR_COL0_UP      := "F"
-const CURSOR_MOVE_COL     := "G"
-const CURSOR_SCROLL_UP    := "M"
-const CURSOR_SAVE_POS     := "s"
-const CURSOR_REST_POS     := "u"
-
-# ERASE
-const ERASE_CURSOR_EOS    := "0J"
-const ERASE_CURSOR_BOS    := "1J"
-const ERASE_SCREEN        := "2J"
-const ERASE_CRSR_EOL      := "0K"
-const ERASE_CRSR_BOL      := "1K"
-const ERASE_LINE          := "2K"
-
-# GRAPHICS MODES
-const GFX_RESET           := "0m"
-const GFX_BOLD            := "1m"
-const GFX_DIMMED          := "2m"
-const GFX_ITALIC          := "3m"
-const GFX_UNDERLINE       := "4m"
-const GFX_BLINKING        := "5m"
-const GFX_INVERSE         := "7m"
-const GFX_HIDDEN          := "8m"
-const GFX_STRIKEOUT       := "9m"
-
-# FOREGROUND COLORS
-const COLOR_RESET         := "0m"
-const COLOR_FG_DEFAULT    := "39m"
-const COLOR_FG_BLACK      := "0;30"
-const COLOR_FG_BLUE       := "0;34"
-const COLOR_FG_GREEN      := "0;32"
-const COLOR_FG_CYAN       := "0;36"
-const COLOR_FG_RED        := "0;31"
-const COLOR_FG_MAGENTA    := "0;35"
-const COLOR_FG_BROWN      := "0;33"
-const COLOR_FG_WHITE      := "0;37"
-const COLOR_FG_GRAY       := "1;30"
-const COLOR_FG_BR_BLUE    := "1;34"
-const COLOR_FG_BR_GREEN   := "1;32"
-const COLOR_FG_BR_CYAN    := "1;36"
-const COLOR_FG_BR_RED     := "1;31"
-const COLOR_FG_BR_MAGENTA := "1;35"
-const COLOR_FG_BR_BROWN   := "1;33"
-const COLOR_FG_BR_WHITE   := "1;37"
-
-# BACKGROUND COLORS
-const COLOR_BG_BLACK      := "40"
-const COLOR_BG_BLUE       := "44"
-const COLOR_BG_GREEN      := "42"
-const COLOR_BG_CYAN       := "46"
-const COLOR_BG_RED        := "41"
-const COLOR_BG_MAGENTA    := "45"
-const COLOR_BG_BROWN      := "43"
-const COLOR_BG_WHITE      := "47"
-const COLOR_BG_GRAY       := "5;40"
-const COLOR_BG_BR_BLUE    := "5;44"
-const COLOR_BG_BR_GREEN   := "5;42"
-const COLOR_BG_BR_CYAN    := "5;46"
-const COLOR_BG_BR_RED     := "5;41"
-const COLOR_BG_BR_MAGENTA := "5;45"
-const COLOR_BG_BR_BROWN   := "5;43"
-const COLOR_BG_BR_WHITE   := "5;47"
-
 # Initialize default colors
 var current_fg_color:int = CGA.WHITE
 var current_bg_color:int = CGA.BLACK
+var ice_color:bool = false
 
 func packedbyearray_to_string_utf8(_input:PackedByteArray) -> String:
 	var ret:String = ""
@@ -135,7 +64,7 @@ func parse_ansi(data: PackedByteArray):
 				#echo(String.chr(char_code))
 
 func process_ansi_sequence(seq):
-	#if '43m' in seq:
+	#if '40m' in seq:
 		#breakpoint
 	if seq == '':
 		return
@@ -143,14 +72,17 @@ func process_ansi_sequence(seq):
 	var params_str = seq.substr(0, seq.length() - 1)
 	var params = []
 	if params_str != '':
-		params = params_str.split(';')
-	else:
-		params = ['0']  # Default parameter
+		if ';' in params_str:
+			params = params_str.split(';')
+		else:
+			params.append(params_str)
+	#else:
+		#params = ['0']  # Default parameter
 	# Convert parameters to integers
 	var params_int = []
 	for p in params:
-		if p == '':
-			p = '0'
+		#if p == '':
+			#p = '0'
 		var n = int(p)
 		params_int.append(n)
 	# Now handle the command based on final_char
@@ -185,8 +117,27 @@ func process_ansi_sequence(seq):
 			pass
 
 func process_sgr(params):
-	if params.size() == 0:
-		params = [0]
+	#if params.size() == 0:
+		#params = [0]
+	# 0m
+	#if params[0] == 0 and params.size() == 1:
+		#bright = false
+		#background_color = CGA.BLACK
+		#foreground_color = CGA.WHITE
+	## check for plain color without bold/nonbold
+	#elif (params[0] >= 30 and params[0] <= 37):
+		#bright = false
+		#foreground_color = params[0] - 30
+	#elif (params[0] >= 40 and params[0] <= 47):
+		#bright = false
+		#background_color = params[0] - 40
+	#if params[0] == 1:
+		#bright = true
+		#if params.size() > 1:
+			#if (params[1] >= 30 and params[1] <= 37):
+				#foreground_color = params[1] - 30 + 8
+			#elif (params[1] >= 40 and params[1] <= 47):
+				#background_color = params[1] - 40 + 8
 	for p in params:
 		match p:
 			0:
@@ -215,7 +166,10 @@ func process_sgr(params):
 				foreground_color = p - 30 if !bright else p - 30 + 8
 			p when (p >= 40 and p <= 47):
 				# Set background color
-				background_color = p - 40# if !bright else p - 40 + 8
+				if ice_color:
+					background_color = p - 40 if !bright else p - 40 + 8
+				else:
+					background_color = p - 40# if !bright else p - 40 + 8
 			p when (p >= 90 and p <= 97):
 				# Set bright foreground color
 				foreground_color = p - 90 if !bright else p - 90 + 8
@@ -348,9 +302,11 @@ func load_ansi_file(file_path: String) -> void:
 	if file:
 		if sauce_data == null:
 			content_length = file.get_length()
+			ice_color = false
 		else:
 			# Exclude SAUCE record and comments from content
 			content_length = sauce_data.FileSize
+			ice_color = (sauce_data.Flags == 3)
 		var content:PackedByteArray
 		for i:int in range(content_length):
 			content.append(file.get_8())
