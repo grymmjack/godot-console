@@ -14,6 +14,7 @@
 ## TO DO
 - Scrollback
 - Cursors
+- PIPEPRINT! port [from my QB64 library](https://github.com/grymmjack/QB64_GJ_LIB/tree/main/PIPEPRINT)
 - Input
 - Baud Rate Emulation
 - ANSI Music?
