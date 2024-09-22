@@ -18,24 +18,30 @@ foreground = NodePath("FG_8x8")
 
 [node name="BG_8x8" type="TileMapLayer" parent="."]
 unique_name_in_owner = true
+visible = false
 tile_set = ExtResource("2_au7dh")
 
 [node name="FG_8x8" type="TileMapLayer" parent="."]
 unique_name_in_owner = true
+visible = false
 tile_set = ExtResource("3_7kr8r")
 
 [node name="BG_9x16" type="TileMapLayer" parent="."]
 unique_name_in_owner = true
+visible = false
 tile_set = ExtResource("6_76aeg")
 
 [node name="FG_9x16" type="TileMapLayer" parent="."]
 unique_name_in_owner = true
+visible = false
 tile_set = ExtResource("7_y7y4u")
 
 [node name="BG_8x16" type="TileMapLayer" parent="."]
 unique_name_in_owner = true
+visible = false
 tile_set = ExtResource("2_756jj")
 
 [node name="FG_8x16" type="TileMapLayer" parent="."]
 unique_name_in_owner = true
+visible = false
 tile_set = ExtResource("3_qr6g2")

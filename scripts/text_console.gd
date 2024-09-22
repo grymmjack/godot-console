@@ -14,15 +14,11 @@ signal bg_color_changed
 signal fg_color_changed
 signal ansi_detected
 
-const SCREEN_MODE_8x8  = "8x8"
-const SCREEN_MODE_8x16 = "8x16"
-const SCREEN_MODE_9x16 = "9x16"
 enum SCREEN_MODE { FONT_8x8, FONT_8x16, FONT_9x16 }
-
 @export_group("Screen")
-@export var rows:int = 25
 @export var columns:int = 80
-@export_enum(SCREEN_MODE_8x8, SCREEN_MODE_8x16, SCREEN_MODE_9x16) var screen_mode = SCREEN_MODE_8x16: set = setup_screen_mode
+@export var rows:int = 25
+@export_enum("8x8", "8x16", "9x16") var screen_mode:int = SCREEN_MODE.FONT_8x16
 @export var scale:int = 1
 @export var scrollback_size:int = 1000
 @export_group("Colors")
@@ -202,9 +198,9 @@ var ASCII_UNICODE := [ "", "☺", "☻", "♥", "♦", "♣", "♠", "•", "◘
 
 func _enter_tree() -> void:
 	setup_window()
+	setup_screen_mode(screen_mode)
 
 func _ready() -> void:
-	setup_screen_mode(screen_mode)
 	is_ready.emit()
 
 func setup_window() -> void:
@@ -230,18 +226,21 @@ func setup_screen_mode(mode:int) -> void:
 			character_width = 8
 			character_height = 8
 			screen_mode = SCREEN_MODE.FONT_8x8
+			print(SCREEN_MODE.FONT_8x8)
 		SCREEN_MODE.FONT_8x16:
 			%BG_8x16.show()
 			%FG_8x16.show()
 			character_width = 8
 			character_height = 16
 			screen_mode = SCREEN_MODE.FONT_8x16
+			print(SCREEN_MODE.FONT_8x16)
 		SCREEN_MODE.FONT_9x16:
 			%BG_9x16.show()
 			%FG_9x16.show()
 			character_width = 9
 			character_height = 16
 			screen_mode = SCREEN_MODE.FONT_9x16
+			print(SCREEN_MODE.FONT_9x16)
 
 # clear screen
 func cls() -> void:
