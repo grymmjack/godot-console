@@ -11,6 +11,13 @@
 - Changing screen mode and scale in Editor updates in real time
 - Can now load ANSIs!
 
+## TO DO
+- Scrollback
+- Cursors
+- Input
+- Baud Rate Emulation
+- ANSI Music?
+  
 ## Example ANSIs
 ![image](https://github.com/user-attachments/assets/8fc95678-4b48-4381-95fc-62601e3c90ba)
 
