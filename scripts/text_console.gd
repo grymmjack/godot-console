@@ -18,8 +18,8 @@ enum SCREEN_MODE { FONT_8x8, FONT_8x16, FONT_9x16 }
 @export_group("Screen")
 @export var columns:int = 80
 @export var rows:int = 25
-@export_enum("8x8", "8x16", "9x16") var screen_mode:int = SCREEN_MODE.FONT_8x16
-@export var scale:int = 1
+@export_enum("8x8", "8x16", "9x16") var screen_mode:int = SCREEN_MODE.FONT_8x16 : set = setup_screen_mode
+@export_range(1, 4) var scale:int = 1.0 : set = setup_window
 @export var scrollback_size:int = 1000
 @export_group("Colors")
 @export var background_color:int = CGA.BLACK
@@ -197,13 +197,16 @@ var UNICODE_ASCII := { "": 0, "☺": 1, "☻": 2, "♥": 3, "♦": 4, "♣": 5, 
 var ASCII_UNICODE := [ "", "☺", "☻", "♥", "♦", "♣", "♠", "•", "◘", "○", "◙", "♂", "♀", "♪", "♫", "☼", "►", "◄", "↕", "‼", "¶", "§", "▬", "↨", "↑", "↓", "→", "←", "∟", "↔", "▲", "▼", " ", "!", "\"", "#", "$", "%", "&", "\'", "(", ")", "*", "+", ",", "-", ".", "/", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ":", ";", "<", "=", ">", "?", "@", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "[", "\\", "]", "^", "_", "`", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "{", "|", "}", "~", "⌂", "Ç", "ü", "é", "â", "ä", "à", "å", "ç", "ê", "ë", "è", "ï", "î", "ì", "Ä", "Å", "É", "æ", "Æ", "ô", "ö", "ò", "û", "ù", "ÿ", "Ö", "Ü", "¢", "£", "¥", "₧", "ƒ", "á", "í", "ó", "ú", "ñ", "Ñ", "ª", "º", "¿", "⌐", "¬", "½", "¼", "¡", "«", "»", "░", "▒", "▓", "│", "┤", "╡", "╢", "╖", "╕", "╣", "║", "╗", "╝", "╜", "╛", "┐", "└", "┴", "┬", "├", "─", "┼", "╞", "╟", "╚", "╔", "╩", "╦", "╠", "═", "╬", "╧", "╨", "╤", "╥", "╙", "╘", "╒", "╓", "╫", "╪", "┘", "┌", "█", "▄", "▌", "▐", "▀", "α", "ß", "Γ", "π", "Σ", "σ", "µ", "τ", "Φ", "Θ", "Ω", "δ", "∞", "φ", "ε", "∩", "≡", "±", "≥", "≤", "⌠", "⌡", "÷", "≈", "°", "∙", "·", "√", "ⁿ", "²", "■", " " ]
 
 func _enter_tree() -> void:
-	setup_window()
+	setup_window(scale)
 	setup_screen_mode(screen_mode)
 
 func _ready() -> void:
 	is_ready.emit()
 
-func setup_window() -> void:
+func setup_window(_scale:int) -> void:
+	scale = _scale
+	if !is_inside_tree():
+		return
 	get_window().size = Vector2i(character_width * columns, character_height * rows) * scale
 	get_window().content_scale_aspect = Window.CONTENT_SCALE_ASPECT_KEEP
 	get_window().content_scale_factor = scale
@@ -211,6 +214,7 @@ func setup_window() -> void:
 	get_window().content_scale_size = Vector2i(character_width * columns, character_height * rows) * scale
 
 func setup_screen_mode(mode:int) -> void:
+	screen_mode = mode
 	if !is_inside_tree():
 		return
 	%BG_8x8.hide()
@@ -225,22 +229,16 @@ func setup_screen_mode(mode:int) -> void:
 			%FG_8x8.show()
 			character_width = 8
 			character_height = 8
-			screen_mode = SCREEN_MODE.FONT_8x8
-			print(SCREEN_MODE.FONT_8x8)
 		SCREEN_MODE.FONT_8x16:
 			%BG_8x16.show()
 			%FG_8x16.show()
 			character_width = 8
 			character_height = 16
-			screen_mode = SCREEN_MODE.FONT_8x16
-			print(SCREEN_MODE.FONT_8x16)
 		SCREEN_MODE.FONT_9x16:
 			%BG_9x16.show()
 			%FG_9x16.show()
 			character_width = 9
 			character_height = 16
-			screen_mode = SCREEN_MODE.FONT_9x16
-			print(SCREEN_MODE.FONT_9x16)
 
 # clear screen
 func cls() -> void:

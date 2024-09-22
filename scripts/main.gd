@@ -7,7 +7,7 @@ func _ready() -> void:
 	#create_colored_tiles(CGA_PALETTE, BASE_TILESET_8x16, "DOS 8x16", "CGA")
 	#create_colored_tiles(CGA_PALETTE, BASE_TILESET_9x16, "DOS 9x16", "CGA")
 	#get_tree().quit(0)
-	color(CGA.BRIGHT_WHITE, CGA.BLACK)
+	color(CGA.WHITE, CGA.BLACK)
 	cls()
 	##print_ruler()
 	#var msg:String = "Hello, World!"
@@ -26,7 +26,7 @@ func _ready() -> void:
 	#load_ansi_file("res://assets/ANSIs/MB4K.ans")
 	#load_ansi_file("res://assets/ANSIs/anst-moebius.ans")
 	#load_ansi_file("res://assets/ANSIs/acknowledgements.ans")
-	#load_ansi_file("res://assets/ANSIs/gj-jorge-test.ans")
+	load_ansi_file("res://assets/ANSIs/gj-jorge-test.ans")
 	#load_ansi_file("res://assets/ANSIs/stormtrooper-pixel-art.png-25.ans")
 	#load_ansi_file("res://assets/ANSIs/stormtrooper-pixel-art.png-25-OPT.ans")
 	load_ansi_file("res://assets/ANSIs/gj-fuel2.ans")
