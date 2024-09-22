@@ -3,21 +3,24 @@
 ## Supports multiple screen modes:
 - 8x8 (50 row mode in DOS)
 - 8x16 (80x25 standard VGA font)
-- 9x16 DOS 9px font width (WIP - it's buggy)
+- 9x16 DOS 9px font width - see: https://16colo.rs/ansiflags.php#letterspacing
 
 ## More goodies
 - Greatly expanded the exported parameters
 - Added scale factor
+- Added support for ANSIFlags - see: https://www.acid.org/info/sauce/sauce.htm#ANSiFlags
 - Changing screen mode and scale in Editor updates in real time
 - Can now load ANSIs!
 
 ## TO DO
-- Scrollback
+- Blinking :D
 - Cursors
-- PIPEPRINT! port [from my QB64 library](https://github.com/grymmjack/QB64_GJ_LIB/tree/main/PIPEPRINT)
 - Input
 - Baud Rate Emulation
+- Scrolling / Scrollback
+- PIPEPRINT! port [from my QB64 library](https://github.com/grymmjack/QB64_GJ_LIB/tree/main/PIPEPRINT)
 - ANSI Music?
+- Possibly making this an @tool so it can load an ANSI into the editor in 2D mode GUI
   
 ## Example ANSIs
 ![image](https://github.com/user-attachments/assets/8fc95678-4b48-4381-95fc-62601e3c90ba)
@@ -25,6 +28,15 @@
 ## Example output
 ![image](https://github.com/user-attachments/assets/0206398b-f128-4126-b79e-6282e94e4634)
 [Web export](https://beta.grymmjack.com/godot-console/) version here (I will update this as needed)
+
+## 9px width mode
+![image](https://github.com/user-attachments/assets/100aaba8-c9f1-4dea-862f-747b5003662d)
+
+## 8px width mode
+![image](https://github.com/user-attachments/assets/eb57faea-8cc0-42a3-843d-7a73ed1f1282)
+
+## 8x8 font mode
+![image](https://github.com/user-attachments/assets/0f8742bc-33a9-4c2a-9025-89df66e9a985)
 
 The node tree is uncluttered:
 ![image](https://github.com/user-attachments/assets/302db284-6091-4423-a505-7bd8e2df0511)
@@ -36,7 +48,6 @@ The node tree is uncluttered:
 1. Load `main.tscn`
 2. Adjust properties of the SCREEN node to suit in the property inspector
 3. In `scripts/main.gd` make sure it is TextScreen and extends `AnsiParser` that's it.
-
 
 ### How the hell does this work?
 > The trick here is that there are 2 tilemap layers. A background one (BG) for background colors under the foreground one (FG). 
@@ -66,6 +77,8 @@ func _ready() -> void:
 	print_ruler()
 	locate(10, 2)
 	cecho("    Hello, World!    ", 14, 4)
+	# will load ansi file from disk at current cursor position
+	load_ansi_file("res://your_ansi.ans")
 
 # print a little ruler
 func print_ruler() -> void:
