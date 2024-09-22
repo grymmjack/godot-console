@@ -1,3 +1,7 @@
+
+![splash](https://github.com/user-attachments/assets/dfdd12be-5a6d-49cb-9f45-c4123059096f)
+
+
 # Working CGA Godot Text Mode 16 color DOS console
 
 ## Supports multiple screen modes:
