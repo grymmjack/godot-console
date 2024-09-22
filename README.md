@@ -1,5 +1,20 @@
 # Working CGA Godot Text Mode 16 color DOS console
 
+## Supports multiple screen modes:
+- 8x8 (50 row mode in DOS)
+- 8x16 (80x25 standard VGA font)
+- 9x16 DOS 9px font width (WIP - it's buggy)
+
+## More goodies
+- Greatly expanded the exported parameters
+- Added scale factor
+- Changing screen mode and scale in Editor updates in real time
+- Can now load ANSIs!
+
+## Example ANSIs
+![image](https://github.com/user-attachments/assets/8fc95678-4b48-4381-95fc-62601e3c90ba)
+
+## Example output
 ![image](https://github.com/user-attachments/assets/0206398b-f128-4126-b79e-6282e94e4634)
 [Web export](https://beta.grymmjack.com/godot-console/) version here (I will update this as needed)
 
@@ -12,7 +27,7 @@ The node tree is uncluttered:
 ## How to use
 1. Load `main.tscn`
 2. Adjust properties of the SCREEN node to suit in the property inspector
-3. In `scripts/main.gd` make sure it extends `TextConsole` that's it.
+3. In `scripts/main.gd` make sure it is TextScreen and extends `AnsiParser` that's it.
 
 
 ### How the hell does this work?
@@ -28,6 +43,7 @@ The node tree is uncluttered:
 - `cecho` = `print` in colors (specify fg/bg)
 - `locate` = `locate` :D
 - `cls` = `cls`
+- `load_ansi_file(pathname)` = load and display an ANSI file
 - etc.
 
 See: [scripts/text_console.gd](scripts/text_console.gd) for basics, `consts`, `enums`, etc.
@@ -54,8 +70,5 @@ func print_ruler() -> void:
 		locate(0, y)
 		echo(str(y))
 ```
-
-## TO DO / WIP:
-- [ANSI Parser](scripts/ansi_parser.gd)
 
 Thanks again to Hueson for the idea to use TileMaps in general, and Selina for the guidance on best way to do it! ❤️
