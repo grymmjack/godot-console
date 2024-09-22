@@ -6,8 +6,10 @@ class_name AnsiParser
 extends TextConsole
 
 var sauce_data:SauceParser.SauceData = null
+var ansi_width:int
+var ansi_height:int
 
-func parse_ansi(data:PackedByteArray):
+func parse_ansi(data:PackedByteArray) -> void:
 	# Process data
 	var data_length:int = data.size()
 	var i:int = 0
@@ -45,7 +47,7 @@ func parse_ansi(data:PackedByteArray):
 				else:
 					echo(String.chr(ASCII_UNICODE.find(char_code)))
 
-func process_ansi_sequence(seq:String):
+func process_ansi_sequence(seq:String) -> void:
 	if seq == '':
 		return
 	var final_char:String = seq[seq.length() - 1]
@@ -78,10 +80,10 @@ func process_ansi_sequence(seq:String):
 			cursor_right(params_int)
 		'D': # Cursor backward
 			cursor_left(params_int)
-		's': # Save cursor position - not yet supported
+		's': # TODO Save cursor position - not yet supported
 			#save_cursor_position()
 			pass
-		'u': # Restore cursor position - not yet supported
+		'u': # TODO Restore cursor position - not yet supported
 			#restore_cursor_position()
 			pass
 		# Add other commands as needed
@@ -89,7 +91,7 @@ func process_ansi_sequence(seq:String):
 			# Unhandled command
 			pass
 
-func process_sgr(params:Array[int]):
+func process_sgr(params:Array[int]) -> void:
 	if params.size() == 0:
 		params = [0]
 	for p:int in params:
@@ -126,7 +128,7 @@ func process_sgr(params:Array[int]):
 				foreground_color = p - 30
 				if bold:
 					foreground_color += 8
-			38: # 256 color foreground - not yet supported
+			38: # TODO 256 color foreground - not yet supported
 				foreground_color = params[2]
 			39: # Set default foreground color
 				foreground_color = CGA.WHITE
@@ -134,7 +136,7 @@ func process_sgr(params:Array[int]):
 				background_color = p - 40
 				if blinking:
 					background_color += 8
-			48: # 256 color background - not yet supported
+			48: # TODO 256 color background - not yet supported
 				background_color = params[2]
 			49: # Set default background color
 				background_color = CGA.BLACK
@@ -142,13 +144,12 @@ func process_sgr(params:Array[int]):
 				foreground_color = p - 90 + 8
 			100,101,102,103,104,105,106,107: # Set high intensity background color
 				background_color = p - 90 + 8
-			# Add other attributes if needed
 			_:
 				# Unhandled SGR code
 				pass
 
 # Cursor movement functions
-func process_cursor_position(params):
+func process_cursor_position(params) -> void:
 	var row = 1
 	var col = 1
 	if params.size() >= 1 and params[0] != '':
@@ -157,67 +158,67 @@ func process_cursor_position(params):
 		col = params[1]
 	locate(col, row)
 
-func cursor_home(params: Array):
+func cursor_home(params:Array) -> void:
 	var row = int(params[0]) - 1 if (params.size() > 0) else 0
 	var col = int(params[1]) - 1 if (params.size() > 1) else 0
 	set_cursor_position(Vector2i(col, row))
 
-func cursor_up(params: Array):
+func cursor_up(params:Array) -> void:
 	var count = int(params[0]) if (params.size() > 0) else 1
 	move_cursor(Vector2i(0, -count))
 
-func cursor_down(params: Array):
+func cursor_down(params:Array) -> void:
 	var count = int(params[0]) if (params.size() > 0) else 1
 	move_cursor(Vector2i(0, count))
 
-func cursor_right(params: Array):
+func cursor_right(params:Array) -> void:
 	var count = int(params[0]) if (params.size() > 0) else 1
 	move_cursor(Vector2i(count, 0))
 
-func cursor_left(params: Array):
+func cursor_left(params:Array) -> void:
 	var count = int(params[0]) if (params.size() > 0) else 1
 	move_cursor(Vector2i(-count, 0))
 
 @warning_ignore("unused_parameter")
-func cursor_col0_down(params: Array):
+func cursor_col0_down(params:Array) -> void:
 	cursor_position.x = 0
 	move_cursor(Vector2i(0, 1))
 
 @warning_ignore("unused_parameter")
-func cursor_col0_up(params: Array):
+func cursor_col0_up(params:Array) -> void:
 	cursor_position.x = 0
 	move_cursor(Vector2i(0, -1))
 
-func cursor_move_col(params: Array):
+func cursor_move_col(params:Array) -> void:
 	if params.size() > 0:
 		var col = int(params[0]) - 1  # Convert to 0-based index
 		set_cursor_position(Vector2i(col, cursor_position.y))
 
-func erase_screen(params: Array):
+func erase_screen(params:Array) -> void:
 	if params.size() > 0 and params[0] == "2":
 		cls()
 
-func erase_line(params: Array):
+func erase_line(params:Array) -> void:
 	if params.size() > 0 and params[0] == "2":
 		clear_line(cursor_position.y)
 
-func clear_line(line_index: int):
+func clear_line(line_index:int) -> void:
 	for x in range(columns):
 		bg(Vector2i(x, line_index), background_color)
 		fg(Vector2i(x, line_index), foreground_color, cha_to_atlas_coord(" "))
 
-func reset_styles():
+func reset_styles() -> void:
 	reset_colors()
 
-func reset_colors():
+func reset_colors() -> void:
 	foreground_color = CGA.WHITE
 	background_color = CGA.BLACK
 
-func move_cursor(delta: Vector2i):
+func move_cursor(delta: Vector2i) -> void:
 	cursor_position += delta
 	screen_wrap()
 
-func set_cursor_position(_pos: Vector2i):
+func set_cursor_position(_pos:Vector2i) -> void:
 	cursor_position = _pos
 	screen_wrap()
 
@@ -225,27 +226,27 @@ func get_cursor_position() -> Vector2i:
 	return cursor_position
 
 @warning_ignore("unused_parameter")
-func set_bold(enabled: bool):
+func set_bold(enabled: bool) -> void:
 	pass
 
 @warning_ignore("unused_parameter")
-func set_dimmed(enabled: bool):
+func set_dimmed(enabled: bool) -> void:
 	pass
 
 @warning_ignore("unused_parameter")
-func set_italic(enabled: bool):
+func set_italic(enabled: bool) -> void:
 	pass
 
 @warning_ignore("unused_parameter")
-func set_underline(enabled: bool):
+func set_underline(enabled: bool) -> void:
 	pass
 
-func swap_colors():
+func swap_colors() -> void:
 	var temp = foreground_color
 	foreground_color = background_color
 	background_color = temp
 
-func load_ansi_file(file_path: String) -> void:
+func load_ansi_file(file_path:String) -> void:
 	utf8_ans = ".utf8ans" in file_path
 	var sauce_parser = SauceParser.new()
 	var content_length:int = 0
@@ -253,13 +254,25 @@ func load_ansi_file(file_path: String) -> void:
 
 	var file = FileAccess.open(file_path, FileAccess.READ)
 	if file:
-		if sauce_data == null:
-			content_length = file.get_length()
-			ice_color = false
-		else:
+		if sauce_data:
 			# Exclude SAUCE record and comments from content
 			content_length = sauce_data.FileSize
-			ice_color = (sauce_data.Flags == 3)
+
+			# Setup ANSI Flags https://www.acid.org/info/sauce/sauce.htm#ANSiFlags
+			ice_color = sauce_data.Flags & sauce_parser.ANSI_FLAG_ICE_COLOR
+			font_8px = (sauce_data.Flags & sauce_parser.ANSI_FLAG_FONT_8PX) and not (sauce_data.Flags & sauce_parser.ANSI_FLAG_FONT_9PX)
+			font_9px = (sauce_data.Flags & sauce_parser.ANSI_FLAG_FONT_9PX) and not (sauce_data.Flags & sauce_parser.ANSI_FLAG_FONT_8PX)
+			if (sauce_data.Flags & sauce_parser.ANSI_FLAG_LEGACY_ASPECT) and not (sauce_data.Flags & sauce_parser.ANSI_FLAG_SQUARE_ASPECT):
+				aspect_ratio = ASPECT_RATIO.LEGACY
+			if (sauce_data.Flags & sauce_parser.ANSI_FLAG_SQUARE_ASPECT) and not (sauce_data.Flags & sauce_parser.ANSI_FLAG_LEGACY_ASPECT):
+				aspect_ratio = ASPECT_RATIO.SQUARE
+
+			# Extract width
+			ansi_width = sauce_data.TInfo1
+			ansi_height = sauce_data.TInfo2
+		else:
+			content_length = file.get_length()
+
 		var content:PackedByteArray
 		for i:int in range(content_length):
 			content.append(file.get_8())

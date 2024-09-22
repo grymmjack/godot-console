@@ -15,7 +15,7 @@ func _ready() -> void:
 	#get_tree().quit(0)
 	color(CGA.WHITE, CGA.BLACK)
 	cls()
-	##print_ruler()
+	#print_ruler()
 	#var msg:String = "Hello, World!"
 	#locate_center(msg, int(rows/2))
 	#cecho(msg, 14, 4)
@@ -39,6 +39,7 @@ func _ready() -> void:
 	#load_ansi_file("res://assets/ANSIs/gj-jorge-test.ans")
 	#load_ansi_file("res://assets/ANSIs/stormtrooper-pixel-art.png-25.ans")
 	#load_ansi_file("res://assets/ANSIs/stormtrooper-pixel-art.png-25-OPT.ans")
+	#load_ansi_file("res://assets/ANSIs/gj-fuel2-legacy-aspect.ans")
 	load_ansi_file("res://assets/ANSIs/gj-fuel2.ans")
 	#load_ansi_file("res://assets/ANSIs/gj-fuel2-8x14.ans")
 	#locate(0, 50)
@@ -64,11 +65,9 @@ func _input(event):
 
 # print a little ruler
 func print_ruler() -> void:
+	for x in range(0, columns, 10):
+		locate(x, cursor_position.y)
+		echo(str(x))
 	for y in range(rows):
-		for x in range(columns):
-			if y == 0:
-				if x % 10 == 0:
-					locate(x, y)
-					echo(str(x))
 		locate(0, y)
-		echo(str(y))
+		echo(str(y+1))

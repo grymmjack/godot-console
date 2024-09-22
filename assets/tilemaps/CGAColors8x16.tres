@@ -7,7 +7,6 @@ resource_name = "CGAColors"
 texture = ExtResource("1_t617t")
 separation = Vector2i(1, 1)
 texture_region_size = Vector2i(8, 16)
-use_texture_padding = false
 0:0/0 = 0
 1:0/0 = 0
 2:0/0 = 0

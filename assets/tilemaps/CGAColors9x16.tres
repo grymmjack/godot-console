@@ -5,8 +5,8 @@
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8itbn"]
 resource_name = "CGAColors"
 texture = ExtResource("1_ah21h")
+separation = Vector2i(0, 1)
 texture_region_size = Vector2i(9, 16)
-use_texture_padding = false
 0:0/0 = 0
 1:0/0 = 0
 2:0/0 = 0

@@ -5,7 +5,7 @@
 # @requires Godot 4.3+
 
 class_name SauceParser
-extends TextConsole
+extends Resource
 
 const SAUCE_ID := "SAUCE"
 const SAUCE_VERSION := "00"
@@ -14,6 +14,13 @@ const SAUCE_VERSION := "00"
 const SAUCE_RECORD_SIZE := 128
 const COMMENT_BLOCK_SIZE := 64
 const COMMENT_ID := "COMNT"
+
+# ANSI Flags https://www.acid.org/info/sauce/sauce.htm#ANSiFlags
+const ANSI_FLAG_ICE_COLOR     = 1^2
+const ANSI_FLAG_FONT_8PX      = 2^2
+const ANSI_FLAG_FONT_9PX      = 3^2
+const ANSI_FLAG_LEGACY_ASPECT = 4^2
+const ANSI_FLAG_SQUARE_ASPECT = 5^2
 
 # SAUCE data structure
 class SauceData:
@@ -93,3 +100,15 @@ func parse_sauce(file_path: String) -> SauceData:
 
 	file.close()
 	return sauce_data
+
+func bytes_to_str8(bytes:PackedByteArray) -> String:
+	var result:String = ""
+	for i in range(bytes.size()):
+		result += String.chr(bytes[i])
+	return result
+
+func bytes_to_int(bytes:PackedByteArray) -> int:
+	var result:int = 0
+	for i in range(bytes.size()):
+		result |= (bytes[i] & 0xFF) << (8 * i)
+	return result
