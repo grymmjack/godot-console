@@ -7,7 +7,6 @@ const CSI := "%c[" % ESC
 # Initialize default colors
 var current_fg_color:int = CGA.WHITE
 var current_bg_color:int = CGA.BLACK
-var ice_color:bool = false
 
 func packedbyearray_to_string_utf8(_input:PackedByteArray) -> String:
 	var ret:String = ""
@@ -64,118 +63,106 @@ func parse_ansi(data: PackedByteArray):
 				#echo(String.chr(char_code))
 
 func process_ansi_sequence(seq):
-	#if '40m' in seq:
-		#breakpoint
 	if seq == '':
 		return
 	var final_char = seq[seq.length() - 1]
 	var params_str = seq.substr(0, seq.length() - 1)
 	var params = []
 	if params_str != '':
-		if ';' in params_str:
-			params = params_str.split(';')
-		else:
-			params.append(params_str)
-	#else:
-		#params = ['0']  # Default parameter
+		params = params_str.split(';')
+	else:
+		params = ['0']  # Default parameter
+
 	# Convert parameters to integers
 	var params_int = []
 	for p in params:
-		#if p == '':
-			#p = '0'
+		if p == '':
+			p = '0'
 		var n = int(p)
 		params_int.append(n)
+
 	# Now handle the command based on final_char
 	match final_char:
-		'm':
-			# SGR - Select Graphic Rendition
+		'm': # SGR - Select Graphic Rendition
 			process_sgr(params_int)
-		'H', 'f':
-			# Cursor position
+		'H', 'f': # Cursor position
 			process_cursor_position(params_int)
-		'A':
-			# Cursor up
+		'A': # Cursor up
 			cursor_up(params_int)
-		'B':
-			# Cursor down
+		'B': # Cursor down
 			cursor_down(params_int)
-		'C':
-			# Cursor forward
+		'C': # Cursor forward
 			cursor_right(params_int)
-		'D':
-			# Cursor backward
+		'D': # Cursor backward
 			cursor_left(params_int)
-		#'s':
-			# Save cursor position
+		's': # Save cursor position - not yet supported
 			#save_cursor_position()
-		#'u':
-			# Restore cursor position
+			pass
+		'u': # Restore cursor position - not yet supported
 			#restore_cursor_position()
+			pass
 		# Add other commands as needed
 		_:
 			# Unhandled command
 			pass
 
 func process_sgr(params):
-	#if params.size() == 0:
-		#params = [0]
-	# 0m
-	#if params[0] == 0 and params.size() == 1:
-		#bright = false
-		#background_color = CGA.BLACK
-		#foreground_color = CGA.WHITE
-	## check for plain color without bold/nonbold
-	#elif (params[0] >= 30 and params[0] <= 37):
-		#bright = false
-		#foreground_color = params[0] - 30
-	#elif (params[0] >= 40 and params[0] <= 47):
-		#bright = false
-		#background_color = params[0] - 40
-	#if params[0] == 1:
-		#bright = true
-		#if params.size() > 1:
-			#if (params[1] >= 30 and params[1] <= 37):
-				#foreground_color = params[1] - 30 + 8
-			#elif (params[1] >= 40 and params[1] <= 47):
-				#background_color = params[1] - 40 + 8
+	if params.size() == 0:
+		params = [0]
 	for p in params:
 		match p:
-			0:
-				# Reset all attributes
+			0: # Reset all attributes
 				foreground_color = CGA.WHITE  # Default foreground
 				background_color = CGA.BLACK  # Default background
-				bright = false
-				blink = false
-			1:
-				# Bold on (bright foreground)
-				foreground_color += 8
-				bright = true
-			#22:
-				 #Bold off
-				#if foreground_color >= 8:
-					#foreground_color -= 8
-			5:
-				 #Blink on
-				blink = true
-				bright = true
-			25:
-				 #Blink off
-				blink = false
-			p when (p >= 30 and p <= 37):
-				# Set foreground color
-				foreground_color = p - 30 if !bright else p - 30 + 8
-			p when (p >= 40 and p <= 47):
-				# Set background color
-				if ice_color:
-					background_color = p - 40 if !bright else p - 40 + 8
-				else:
-					background_color = p - 40# if !bright else p - 40 + 8
-			p when (p >= 90 and p <= 97):
-				# Set bright foreground color
-				foreground_color = p - 90 if !bright else p - 90 + 8
-			p when (p >= 100 and p <= 107):
-				# Set bright background color
-				background_color = p - 100 if !bright else p - 100 + 8
+				bold = false
+				blinking = false
+				inverted = false
+			1: # Bold on (bright foreground)
+				bold = true
+				if foreground_color < 8:
+					foreground_color += 8
+			2,22: # Enable low intensity, disable high intensity
+				bold = false
+				if foreground_color > 7:
+					foreground_color -= 8
+			5,6: # Blink on
+				blinking = true
+				if background_color < 8:
+					background_color += 8
+			7: # Reverse video on
+				if !inverted:
+					inverted = true
+			25: # Blink off
+				blinking = false
+				if background_color > 7:
+					background_color -= 8
+			27: # Reverse video off
+				if inverted:
+					inverted = false
+			30,31,32,33,34,35,36,37: # Set foreground color
+				foreground_color = p - 30
+				if bold:
+					foreground_color += 8
+			38: # 256 color foreground - not yet supported
+				var r:int = params[1]
+				var g:int = params[2]
+				var b:int = params[3]
+			39: # Set default foreground color
+				foreground_color = CGA.WHITE
+			40,41,42,43,44,45,46,47: # Set background color
+				background_color = p - 40
+				if blinking:
+					background_color += 8
+			48: # 256 color background - not yet supported
+				var r:int = params[1]
+				var g:int = params[2]
+				var b:int = params[3]
+			49: # Set default background color
+				background_color = CGA.BLACK
+			90,91,92,93,94,95,96,97: # Set high intensity foreground color
+				foreground_color = p - 90 + 8
+			100,101,102,103,104,105,106,107: # Set high intensity background color
+				background_color = p - 90 + 8
 			# Add other attributes if needed
 			_:
 				# Unhandled SGR code
@@ -231,12 +218,10 @@ func cursor_move_col(params: Array):
 func erase_screen(params: Array):
 	if params.size() > 0 and params[0] == "2":
 		cls()
-	# Handle other erase options if needed
 
 func erase_line(params: Array):
 	if params.size() > 0 and params[0] == "2":
 		clear_line(cursor_position.y)
-	# Handle other erase options if needed
 
 func clear_line(line_index: int):
 	for x in range(columns):
@@ -245,7 +230,6 @@ func clear_line(line_index: int):
 
 func reset_styles():
 	reset_colors()
-	# Reset other styles as needed
 
 func reset_colors():
 	current_fg_color = CGA.WHITE
@@ -268,22 +252,18 @@ func get_cursor_position() -> Vector2i:
 
 @warning_ignore("unused_parameter")
 func set_bold(enabled: bool):
-	# Implement bold text style if applicable
 	pass
 
 @warning_ignore("unused_parameter")
 func set_dimmed(enabled: bool):
-	# Implement dimmed text style if applicable
 	pass
 
 @warning_ignore("unused_parameter")
 func set_italic(enabled: bool):
-	# Implement italic text style if applicable
 	pass
 
 @warning_ignore("unused_parameter")
 func set_underline(enabled: bool):
-	# Implement underline text style if applicable
 	pass
 
 func swap_colors():
@@ -310,9 +290,7 @@ func load_ansi_file(file_path: String) -> void:
 		var content:PackedByteArray
 		for i:int in range(content_length):
 			content.append(file.get_8())
-		#var content = file.get_as_text()
 		file.close()
-		#breakpoint
 		parse_ansi(content)
 	else:
 		print("Failed to open file: %s" % file_path)

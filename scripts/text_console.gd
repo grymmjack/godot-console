@@ -37,8 +37,10 @@ enum SCREEN_MODE { FONT_8x8, FONT_8x16, FONT_9x16 }
 @export var foreground:TileMapLayer
 
 static var _scrollback_buffer:Array[TextChar]
-var bright:bool = false
-var blink:bool = true
+var bold:bool = false
+var blinking:bool = false
+var inverted:bool = false
+var ice_color:bool = false
 
 enum VERTICAL_DIRECTION { DOWN, UP }
 enum HORIZONTAL_DIRECTION { LEFT, RIGHT }
