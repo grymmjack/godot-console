@@ -105,4 +105,9 @@ func print_ruler() -> void:
 		echo(str(y))
 ```
 
+## PLAN?
+<img alt="godot-console" src="https://github.com/user-attachments/assets/49a0f80d-fc55-444d-a77d-48cc917b216b">
+
+
+
 Thanks again to Hueson for the idea to use TileMaps in general, and Selina for the guidance on best way to do it! ❤️
