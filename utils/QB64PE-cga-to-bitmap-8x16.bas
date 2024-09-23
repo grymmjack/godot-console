@@ -57,9 +57,6 @@ DIM scaled_canvas AS LONG
 scaled_canvas& = _NEWIMAGE(w& * SCALE, h& * SCALE, 32)
 _SOURCE CANVAS&
 _DEST scaled_canvas&
-' _DONTBLEND CANVAS&
-' _SETALPHA 255, scaled_canvas&
-' CLS
 _PUTIMAGE
 SCREEN scaled_canvas&
 _SAVEIMAGE "CGA-" + _TRIM$(STR$(CHAR_W)) + "x" + _TRIM$(STR$(CHAR_H)) + "-" + _TRIM$(STR$(GRID_W)) + "x" + _TRIM$(STR$(GRID_H)) + "-SCALED-" + _TRIM$(STR$(SCALE)) + "x.png", scaled_canvas&, "PNG"

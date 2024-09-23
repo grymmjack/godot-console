@@ -23,7 +23,7 @@
 - PIPEPRINT! port [from my QB64 library](https://github.com/grymmjack/QB64_GJ_LIB/tree/main/PIPEPRINT)
 - ANSI Music?
 - Possibly making this an @tool so it can load an ANSI into the editor in 2D mode GUI
-  
+
 ## Example ANSIs
 ![image](https://github.com/user-attachments/assets/8fc95678-4b48-4381-95fc-62601e3c90ba)
 
@@ -52,8 +52,8 @@ The node tree is uncluttered:
 3. In `scripts/main.gd` make sure it is TextScreen and extends `AnsiParser` that's it.
 
 ### How the hell does this work?
-> The trick here is that there are 2 tilemap layers. A background one (BG) for background colors under the foreground one (FG). 
-- Since CGA has 16 background colors we have 16 background tiles in the BG tilemap. 
+> The trick here is that there are 2 tilemap layers. A background one (BG) for background colors under the foreground one (FG).
+- Since CGA has 16 background colors we have 16 background tiles in the BG tilemap.
 - Since CGA has 16 foreground colors, we have 1 DOS Font 8x16 that has alternative tiles for every tile to match every color in the CGA palette. (Thanks to [SelinaDev](https://github.com/SelinaDev/) for the help and idea to use alternative tiles instead of duplicate tilemap atlasses!)
 
 > Then we just use `set_cell` and some little translation funcs to do stuff. This gets us a x, y grid just like `SCREEN 0` in basic, etc. It's not REAL console mode, it's a graphical version. Godot doesn't have the ability to do CLI stuff AFAIK.

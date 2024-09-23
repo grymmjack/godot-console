@@ -27,7 +27,7 @@ enum SCREEN_MODE { FONT_8x8, FONT_8x16, FONT_9x16 }
 @export_enum("8x8", "8x16", "9x16") var screen_mode:int = SCREEN_MODE.FONT_8x16 : set = setup_screen_mode
 @export_range(1, 4) var scale:int = 1 : set = setup_window
 @export_enum("Legacy Aspect", "Square Aspect") var aspect_ratio:int = ASPECT_RATIO.SQUARE
-
+@export var locked:bool = false
 @export var scrollback_size:int = 1000
 @export_group("Colors")
 @export var background_color:int = CGA.BLACK

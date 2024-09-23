@@ -62,7 +62,8 @@ func _ready() -> void:
 
 func _input(event):
 	if event is InputEventKey:
-		#print(OS.get_keycode_string(event.keycode))
+		if event.pressed:
+			print(event.as_text())
 		if OS.get_keycode_string(event.keycode) == "Escape":
 			get_tree().quit()
 

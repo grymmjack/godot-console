@@ -20,12 +20,12 @@ h& = ROWS * GRID_H
 CANVAS& = _NEWIMAGE(w&, h&, 32)
 SCREEN CANVAS&
 _DEST CANVAS&
-' _DONTBLEND CANVAS&
-' _SETALPHA 255, CANVAS&
-' CLS
 
 DIM AS INTEGER i, x, y
 DIM c AS STRING
+DIM AS LONG color_white
+color_white& = _RGB32(255, 255, 255)
+COLOR color_white&, 0
 
 FOR i% = 0 TO 255
 	x% = (i% MOD COLS) * GRID_W
@@ -39,9 +39,6 @@ DIM scaled_canvas AS LONG
 scaled_canvas& = _NEWIMAGE(w& * SCALE, h& * SCALE, 32)
 _SOURCE CANVAS&
 _DEST scaled_canvas&
-' _DONTBLEND CANVAS&
-' _SETALPHA 255, scaled_canvas&
-' CLS
 _PUTIMAGE
 SCREEN scaled_canvas&
 _SAVEIMAGE "DOS-" + _TRIM$(STR$(CHAR_W)) + "x" + _TRIM$(STR$(CHAR_H)) + "-" + _TRIM$(STR$(GRID_W)) + "x" + _TRIM$(STR$(GRID_H)) + "-SCALED-" + _TRIM$(STR$(SCALE)) + "x.png", scaled_canvas&, "PNG"
