@@ -1,6 +1,4 @@
-
-![splash](https://github.com/user-attachments/assets/dfdd12be-5a6d-49cb-9f45-c4123059096f)
-
+![GODOT-CONSOLE](https://github.com/user-attachments/assets/59b55103-8eca-4cd9-a4ae-510aa3072923)
 
 # Working CGA Godot Text Mode 16 color DOS console
 
