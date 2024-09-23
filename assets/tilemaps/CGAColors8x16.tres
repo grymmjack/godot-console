@@ -1,6 +1,7 @@
-[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://d4b687rujakbv"]
+[gd_resource type="TileSet" load_steps=5 format=3 uid="uid://d4b687rujakbv"]
 
-[ext_resource type="Texture2D" uid="uid://dcr0rgdb3ccke" path="res://assets/images/CGA-8x16-9x17-SCALED-1x.png" id="1_t617t"]
+[ext_resource type="Texture2D" uid="uid://dmixsf2m2tcn2" path="res://assets/images/CGA-8x16-9x17-SCALED-1x.png" id="1_t617t"]
+[ext_resource type="Texture2D" uid="uid://b5tkluwyw7h2q" path="res://assets/images/CGA-BLINKING-8x16-9x17-SCALED-1x.png" id="2_ivr2o"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8itbn"]
 resource_name = "CGAColors"
@@ -24,6 +25,61 @@ texture_region_size = Vector2i(8, 16)
 14:0/0 = 0
 15:0/0 = 0
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3b8ly"]
+resource_name = "BLINKING"
+texture = ExtResource("2_ivr2o")
+separation = Vector2i(1, 1)
+texture_region_size = Vector2i(8, 16)
+0:0/animation_frame_0/duration = 1.0
+0:0/animation_frame_1/duration = 1.0
+0:0/0 = 0
+2:0/animation_frame_0/duration = 1.0
+2:0/animation_frame_1/duration = 1.0
+2:0/0 = 0
+4:0/animation_frame_0/duration = 1.0
+4:0/animation_frame_1/duration = 1.0
+4:0/0 = 0
+6:0/animation_frame_0/duration = 1.0
+6:0/animation_frame_1/duration = 1.0
+6:0/0 = 0
+8:0/animation_frame_0/duration = 1.0
+8:0/animation_frame_1/duration = 1.0
+8:0/0 = 0
+10:0/animation_frame_0/duration = 1.0
+10:0/animation_frame_1/duration = 1.0
+10:0/0 = 0
+12:0/animation_frame_0/duration = 1.0
+12:0/animation_frame_1/duration = 1.0
+12:0/0 = 0
+14:0/animation_frame_0/duration = 1.0
+14:0/animation_frame_1/duration = 1.0
+14:0/0 = 0
+16:0/animation_frame_0/duration = 1.0
+16:0/animation_frame_1/duration = 1.0
+16:0/0 = 0
+18:0/animation_frame_0/duration = 1.0
+18:0/animation_frame_1/duration = 1.0
+18:0/0 = 0
+20:0/animation_frame_0/duration = 1.0
+20:0/animation_frame_1/duration = 1.0
+20:0/0 = 0
+22:0/animation_frame_0/duration = 1.0
+22:0/animation_frame_1/duration = 1.0
+22:0/0 = 0
+24:0/animation_frame_0/duration = 1.0
+24:0/animation_frame_1/duration = 1.0
+24:0/0 = 0
+26:0/animation_frame_0/duration = 1.0
+26:0/animation_frame_1/duration = 1.0
+26:0/0 = 0
+28:0/animation_frame_0/duration = 1.0
+28:0/animation_frame_1/duration = 1.0
+28:0/0 = 0
+30:0/animation_frame_0/duration = 1.0
+30:0/animation_frame_1/duration = 1.0
+30:0/0 = 0
+
 [resource]
 tile_size = Vector2i(8, 16)
 sources/0 = SubResource("TileSetAtlasSource_8itbn")
+sources/1 = SubResource("TileSetAtlasSource_3b8ly")

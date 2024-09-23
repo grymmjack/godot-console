@@ -404,6 +404,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 func create_colored_tiles(colors, base_tileset:TileSet, font_name:String, palette_name:String) -> void:
 	var tileset:TileSet = base_tileset.duplicate(true)
 	var tileset_source:TileSetAtlasSource = tileset.get_source(0)
+	var blinking_tileset_source:TileSetAtlasSource = tileset.get_source(1)
 	var grid_size:Vector2i = tileset_source.get_atlas_grid_size()
 	var total_colors:int = colors.size()
 	for c:int in range(0, total_colors):
@@ -415,6 +416,13 @@ func create_colored_tiles(colors, base_tileset:TileSet, font_name:String, palett
 			for x:int in range(grid_size.x):
 				var id:int = tileset_source.create_alternative_tile(Vector2i(x, y), c + total_colors)
 				var colored_tile_data:TileData = tileset_source.get_tile_data(Vector2i(x, y), id)
+				colored_tile_data.modulate.r8 = colors[c].r
+				colored_tile_data.modulate.g8 = colors[c].g
+				colored_tile_data.modulate.b8 = colors[c].b
+		for y:int in range(grid_size.y):
+			for x:int in range(0, grid_size.x*2, 2):
+				var id:int = blinking_tileset_source.create_alternative_tile(Vector2i(x, y), c + total_colors)
+				var colored_tile_data:TileData = blinking_tileset_source.get_tile_data(Vector2i(x, y), id)
 				colored_tile_data.modulate.r8 = colors[c].r
 				colored_tile_data.modulate.g8 = colors[c].g
 				colored_tile_data.modulate.b8 = colors[c].b

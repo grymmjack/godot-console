@@ -4,7 +4,7 @@ CONST SCALE=1
 CONST ROWS=1
 CONST COLS=16
 
-CONST CHAR_W=9
+CONST CHAR_W=8
 CONST CHAR_H=16
 
 CONST GRID_W=9
@@ -47,7 +47,7 @@ DIM c AS STRING
 FOR i% = 0 TO 15
 	x% = (i% MOD COLS) * (GRID_W * 2)
 	y% = (i% \ COLS) * GRID_H
-	LINE (x%, y%)-STEP(GRID_W, GRID_H), CGA~&(i%), BF
+	LINE (x%, y%)-STEP(CHAR_W, GRID_H), CGA~&(i%), BF
 NEXT
 
 DIM scaled_canvas AS LONG
