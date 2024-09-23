@@ -1,3 +1,4 @@
+# GODOT-CONSOLE
 # ANSI Text Parser for Godot 4
 # @author Rick Christy <grymmjack@gmail.com>
 # @requires Godot 4.3+

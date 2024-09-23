@@ -1,3 +1,4 @@
+# GODOT-CONSOLE
 # Sauce Parser for Godot 4
 # @see https://www.acid.org/info/sauce/sauce.htm
 #

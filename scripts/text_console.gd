@@ -1,3 +1,8 @@
+# GODOT-CONSOLE
+# Text Console for Godot 4 - Main
+# @author Rick Christy <grymmjack@gmail.com>
+# @requires Godot 4.3+
+
 @icon("res://icon.svg")
 class_name TextConsole
 extends Node
@@ -35,7 +40,7 @@ enum SCREEN_MODE { FONT_8x8, FONT_8x16, FONT_9x16 }
 @export var background:TileMapLayer
 @export var foreground:TileMapLayer
 
-static var _scrollback_buffer:Array[TextChar]
+var _scrollback_buffer:Array[TextChar]
 var bold:bool = false
 var blinking:bool = false
 var inverted:bool = false

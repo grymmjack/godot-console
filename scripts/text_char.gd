@@ -1,3 +1,8 @@
+# GODOT-CONSOLE
+# Text Console for Godot 4
+# @author Rick Christy <grymmjack@gmail.com>
+# @requires Godot 4.3+
+
 class_name TextChar
 extends Resource
 

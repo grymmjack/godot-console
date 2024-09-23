@@ -1,3 +1,4 @@
+# GODOT-CONSOLE
 # ANSI Text Parser for Godot 4
 # This is the SCREEN (TextScreen) which can show ANSI art and use text mode
 #
