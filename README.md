@@ -13,6 +13,7 @@
 - Added support for ANSIFlags - see: https://www.acid.org/info/sauce/sauce.htm#ANSiFlags
 - Changing screen mode and scale in Editor updates in real time
 - Can now load ANSIs!
+- Supports iCE colors (16 background colors no blinking)
 - Supports blinking :)
 
 ## TO DO
@@ -21,7 +22,9 @@
 - Baud Rate Emulation
 - Scrolling / Scrollback
 - PIPEPRINT! port [from my QB64 library](https://github.com/grymmjack/QB64_GJ_LIB/tree/main/PIPEPRINT)
+- Lightbar Menus :D
 - ANSI Music?
+- Legacy DOS Aspect Ratio / Square Aspect Ratio support (maybe!)
 - Possibly making this an @tool so it can load an ANSI into the editor in 2D mode GUI
 
 ## Example ANSIs
