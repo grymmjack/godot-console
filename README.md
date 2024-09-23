@@ -13,9 +13,9 @@
 - Added support for ANSIFlags - see: https://www.acid.org/info/sauce/sauce.htm#ANSiFlags
 - Changing screen mode and scale in Editor updates in real time
 - Can now load ANSIs!
+- Supports blinking :)
 
 ## TO DO
-- Blinking :D
 - Cursors
 - Input
 - Baud Rate Emulation
@@ -39,6 +39,14 @@
 
 ## 8x8 font mode
 ![image](https://github.com/user-attachments/assets/0f8742bc-33a9-4c2a-9025-89df66e9a985)
+
+## Blinking examples
+> Regular old blinking
+![godot-console-blinking-example](https://github.com/user-attachments/assets/67b316b3-fb98-418f-8d75-d5b4afa8095c)
+> Cat blinking :D
+![godot-console-blinking-example-cat](https://github.com/user-attachments/assets/3d2dcfb4-bac4-4767-8004-80a530292a38)
+> Supports blinking and non-blinking at the same time because tiles
+![godot-blinking-and-non-blinking-at-once](https://github.com/user-attachments/assets/b785ba4d-0689-46ca-b59b-78fbcf1f9019)
 
 The node tree is uncluttered:
 ![image](https://github.com/user-attachments/assets/302db284-6091-4423-a505-7bd8e2df0511)
