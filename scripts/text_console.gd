@@ -26,6 +26,7 @@ enum SCREEN_MODE { FONT_8x8, FONT_8x16, FONT_9x16 }
 @export var rows:int = 25
 @export_enum("8x8", "8x16", "9x16") var screen_mode:int = SCREEN_MODE.FONT_8x16 : set = setup_screen_mode
 @export_range(1, 4) var scale:int = 1 : set = setup_window
+@export var blinking_enabled_at_start:bool = false
 @export_enum("Legacy Aspect", "Square Aspect") var aspect_ratio:int = ASPECT_RATIO.SQUARE
 @export var locked:bool = false
 @export var scrollback_size:int = 1000
@@ -70,6 +71,8 @@ const BASE_TILE_SIZE_9x16:Vector2i = Vector2i(9, 16)
 const TARGET_PATH:String = "res://assets/tilemaps"
 const BG_ATLAS_ID := 0
 const FG_ATLAS_ID := 0
+const BG_BLINKING_ATLAS_ID := 1
+const FG_BLINKING_ATLAS_ID := 1
 
 var character_width:int = 8
 var character_height:int = 16
@@ -257,13 +260,13 @@ func cls() -> void:
 	is_clearing.emit()
 	for y in range(rows):
 		for x in range(columns):
-			bg(Vector2i(x, y), background_color)
+			bg(Vector2i(x, y), background_color, blinking)
 	_set_cursor_position(Vector2i(0, 0))
 	finished_clearing.emit()
 
 # set foreground and background text colors
 func color(fg_color:int, bg_color:int) -> void:
-	color_changed.emit(fg_color, bg_color)
+	color_changed.emit(fg_color, bg_color, blinking)
 	foreground_color = fg_color
 	background_color = bg_color
 
@@ -310,8 +313,8 @@ func echo(_str:String) -> void:
 	for i in len(_str):
 		var cha:String = _str[i]
 		var tile:Vector2i = cha_to_atlas_coord(cha)
-		bg(Vector2i(cursor_position.x, cursor_position.y), background_color)
-		fg(Vector2i(cursor_position.x, cursor_position.y), foreground_color, tile)
+		bg(Vector2i(cursor_position.x, cursor_position.y), background_color, blinking)
+		fg(Vector2i(cursor_position.x, cursor_position.y), foreground_color, tile, blinking)
 		var new_x:int = cursor_position.x + 1
 		var new_y:int = cursor_position.y
 		locate(new_x, new_y)
@@ -322,26 +325,37 @@ func cecho(_str:String, fg_color:int, bg_color:int) -> void:
 	for i in len(_str):
 		var cha:String = _str[i]
 		var tile:Vector2i = cha_to_atlas_coord(cha)
-		bg(Vector2i(cursor_position.x, cursor_position.y), bg_color)
-		fg(Vector2i(cursor_position.x, cursor_position.y), fg_color, tile)
+		bg(Vector2i(cursor_position.x, cursor_position.y), bg_color, blinking)
+		fg(Vector2i(cursor_position.x, cursor_position.y), fg_color, tile, blinking)
 		var new_x:int = cursor_position.x + 1
 		var new_y:int = cursor_position.y
 		locate(new_x, new_y)
 
 # set background color using %BG tilemap layer
-func bg(_position:Vector2i, _color:int) -> void:
+func bg(_position:Vector2i, _color:int, blinking:bool = false) -> void:
 	color_changed.emit()
 	bg_color_changed.emit()
-	%BG_8x8.set_cell(_position, BG_ATLAS_ID, Vector2i(_color, 0))
-	%BG_8x16.set_cell(_position, BG_ATLAS_ID, Vector2i(_color, 0))
-	%BG_9x16.set_cell(_position, BG_ATLAS_ID, Vector2i(_color, 0))
+	var source_id:int
+	#if blinking and blinking_enabled_at_start and not ice_color:
+		#source_id = BG_BLINKING_ATLAS_ID
+	#else:
+	source_id = BG_ATLAS_ID
+	%BG_8x8.set_cell(_position, source_id, Vector2i(_color, 0))
+	%BG_8x16.set_cell(_position, source_id, Vector2i(_color, 0))
+	%BG_9x16.set_cell(_position, source_id, Vector2i(_color, 0))
 
 # set a foreground colored cell using %FG tilemap layer
-func fg(_position:Vector2i, _color:int, _tile:Vector2i) -> void:
+func fg(_position:Vector2i, _color:int, _tile:Vector2i, blinking:bool = false) -> void:
 	color_changed.emit()
 	fg_color_changed.emit()
-	var alternative_tile:int = _color + CGA_PALETTE.size()
-	var source_id:int = FG_ATLAS_ID
+	var alternative_tile:int
+	var source_id:int
+	if blinking and blinking_enabled_at_start and not ice_color:
+		alternative_tile = _color + CGA_PALETTE.size()
+		source_id = FG_BLINKING_ATLAS_ID
+	else:
+		alternative_tile = _color + CGA_PALETTE.size()
+		source_id = FG_ATLAS_ID
 	%FG_8x8.set_cell(_position, source_id, _tile, alternative_tile)
 	%FG_8x16.set_cell(_position, source_id, _tile, alternative_tile)
 	%FG_9x16.set_cell(_position, source_id, _tile, alternative_tile)
@@ -353,7 +367,11 @@ func cha_to_atlas_coord(cha:String) -> Vector2i:
 		ansi_detected.emit()
 	@warning_ignore("integer_division")
 	var y:int = int(cha_ord / FONT_ATLAS_COLS)
-	var x:int = int(cha_ord % FONT_ATLAS_COLS)
+	var x:int
+	if blinking and blinking_enabled_at_start and not ice_color:
+		x = int(cha_ord % FONT_ATLAS_COLS) * 2
+	else:
+		x = int(cha_ord % FONT_ATLAS_COLS)
 	return Vector2i(x, y)
 
 # screen wrap update
@@ -401,7 +419,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 
 # Create colored tile alternates
 # thank you to Selina - https://github.com/SelinaDev/
-func create_colored_tiles(colors, base_tileset:TileSet, font_name:String, palette_name:String) -> void:
+func create_colored_tiles(colors, base_tileset:TileSet, font_name:String, palette_name:String, blink_speed:float=0.33) -> void:
 	var tileset:TileSet = base_tileset.duplicate(true)
 	var tileset_source:TileSetAtlasSource = tileset.get_source(0)
 	var blinking_tileset_source:TileSetAtlasSource = tileset.get_source(1)
@@ -423,6 +441,8 @@ func create_colored_tiles(colors, base_tileset:TileSet, font_name:String, palett
 			for x:int in range(0, grid_size.x*2, 2):
 				var id:int = blinking_tileset_source.create_alternative_tile(Vector2i(x, y), c + total_colors)
 				var colored_tile_data:TileData = blinking_tileset_source.get_tile_data(Vector2i(x, y), id)
+				blinking_tileset_source.set_tile_animation_frame_duration(Vector2i(x, y), 0, blink_speed)
+				blinking_tileset_source.set_tile_animation_frame_duration(Vector2i(x, y), 1, blink_speed)
 				colored_tile_data.modulate.r8 = colors[c].r
 				colored_tile_data.modulate.g8 = colors[c].g
 				colored_tile_data.modulate.b8 = colors[c].b

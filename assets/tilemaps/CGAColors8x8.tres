@@ -1,7 +1,7 @@
 [gd_resource type="TileSet" load_steps=5 format=3 uid="uid://dmj5j0fu2jpc6"]
 
-[ext_resource type="Texture2D" uid="uid://dvlejpf40krt1" path="res://assets/images/CGA-8x8-9x9-SCALED-1x.png" id="1_g4ajx"]
-[ext_resource type="Texture2D" uid="uid://b44tcgmwv8inn" path="res://assets/images/CGA-BLINKING-8x8-9x9-SCALED-1x.png" id="2_vurrp"]
+[ext_resource type="Texture2D" uid="uid://b7d1c6k0u0enx" path="res://assets/images/CGA-8x8-9x9-SCALED-1x.png" id="1_g4ajx"]
+[ext_resource type="Texture2D" uid="uid://did2ci4l2adlk" path="res://assets/images/CGA-BLINKING-8x8-9x9-SCALED-1x.png" id="2_vurrp"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8itbn"]
 resource_name = "CGAColors"

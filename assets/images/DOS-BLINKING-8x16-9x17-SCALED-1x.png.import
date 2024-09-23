@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bixqq8fa17a76"
-path="res://.godot/imported/splash.svg-90c805944507d07dca6d697cae069c19.ctex"
+uid="uid://57dxptideom5"
+path="res://.godot/imported/DOS-BLINKING-8x16-9x17-SCALED-1x.png-278c69b063aecab8d3cc20775e617600.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://splash.svg"
-dest_files=["res://.godot/imported/splash.svg-90c805944507d07dca6d697cae069c19.ctex"]
+source_file="res://assets/images/DOS-BLINKING-8x16-9x17-SCALED-1x.png"
+dest_files=["res://.godot/imported/DOS-BLINKING-8x16-9x17-SCALED-1x.png-278c69b063aecab8d3cc20775e617600.ctex"]
 
 [params]
 
@@ -32,6 +32,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=1.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false

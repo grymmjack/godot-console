@@ -17,11 +17,16 @@ const COMMENT_BLOCK_SIZE := 64
 const COMMENT_ID := "COMNT"
 
 # ANSI Flags https://www.acid.org/info/sauce/sauce.htm#ANSiFlags
-const ANSI_FLAG_ICE_COLOR     = 1^2
-const ANSI_FLAG_FONT_8PX      = 2^2
-const ANSI_FLAG_FONT_9PX      = 3^2
-const ANSI_FLAG_LEGACY_ASPECT = 4^2
-const ANSI_FLAG_SQUARE_ASPECT = 5^2
+# B S L R A 0 0 0
+# 0 1 2 3 4 5 6 7
+const ANSI_FLAG_ICE_COLOR     = 1 << 0
+const ANSI_FLAG_FONT_8PX      = 1 << 1
+const ANSI_FLAG_FONT_9PX      = 1 << 2
+const ANSI_FLAG_LEGACY_ASPECT = 1 << 3
+const ANSI_FLAG_SQUARE_ASPECT = 1 << 4
+const ANSI_FLAG_BIT_6         = 1 << 5
+const ANSI_FLAG_BIT_7         = 1 << 6
+const ANSI_FLAG_BIT_8         = 1 << 7
 
 # SAUCE data structure
 class SauceData:

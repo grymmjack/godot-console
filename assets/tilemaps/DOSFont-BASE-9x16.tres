@@ -1,7 +1,7 @@
 [gd_resource type="TileSet" load_steps=5 format=3 uid="uid://c6lo7eshfb5ml"]
 
-[ext_resource type="Texture2D" uid="uid://jc0hu4dbfbbw" path="res://assets/images/DOS-9x16-9x17-SCALED-1x.png" id="1_26egh"]
-[ext_resource type="Texture2D" uid="uid://bncf2f134c5u5" path="res://assets/images/DOS-BLINKING-9x16-9x17-SCALED-1x.png" id="2_fb6gu"]
+[ext_resource type="Texture2D" uid="uid://bpnlwcer85jnd" path="res://assets/images/DOS-9x16-9x17-SCALED-1x.png" id="1_26egh"]
+[ext_resource type="Texture2D" uid="uid://bal34hpigm0vf" path="res://assets/images/DOS-BLINKING-9x16-9x17-SCALED-1x.png" id="2_fb6gu"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8itbn"]
 resource_name = "FONT"

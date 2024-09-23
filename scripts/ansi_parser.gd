@@ -113,8 +113,9 @@ func process_sgr(params:Array[int]) -> void:
 					foreground_color -= 8
 			5,6: # Blink on
 				blinking = true
-				if background_color < 8:
-					background_color += 8
+				if ice_color:
+					if background_color < 8:
+						background_color += 8
 			7: # Reverse video on
 				if !inverted:
 					inverted = true
@@ -130,15 +131,17 @@ func process_sgr(params:Array[int]) -> void:
 				if bold:
 					foreground_color += 8
 			38: # TODO 256 color foreground - not yet supported
-				foreground_color = params[2]
+				# foreground_color = params[2]
+				pass
 			39: # Set default foreground color
 				foreground_color = CGA.WHITE
 			40,41,42,43,44,45,46,47: # Set background color
 				background_color = p - 40
-				if blinking:
+				if blinking and ice_color:
 					background_color += 8
 			48: # TODO 256 color background - not yet supported
-				background_color = params[2]
+				# background_color = params[2]
+				pass
 			49: # Set default background color
 				background_color = CGA.BLACK
 			90,91,92,93,94,95,96,97: # Set high intensity foreground color
@@ -205,8 +208,8 @@ func erase_line(params:Array) -> void:
 
 func clear_line(line_index:int) -> void:
 	for x in range(columns):
-		bg(Vector2i(x, line_index), background_color)
-		fg(Vector2i(x, line_index), foreground_color, cha_to_atlas_coord(" "))
+		bg(Vector2i(x, line_index), background_color, blinking)
+		fg(Vector2i(x, line_index), foreground_color, cha_to_atlas_coord(" "), blinking)
 
 func reset_styles() -> void:
 	reset_colors()
@@ -258,14 +261,20 @@ func load_ansi_file(file_path:String) -> void:
 		if sauce_data:
 			# Exclude SAUCE record and comments from content
 			content_length = sauce_data.FileSize
-
 			# Setup ANSI Flags https://www.acid.org/info/sauce/sauce.htm#ANSiFlags
-			ice_color = sauce_data.Flags & sauce_parser.ANSI_FLAG_ICE_COLOR
-			font_8px = (sauce_data.Flags & sauce_parser.ANSI_FLAG_FONT_8PX) and not (sauce_data.Flags & sauce_parser.ANSI_FLAG_FONT_9PX)
-			font_9px = (sauce_data.Flags & sauce_parser.ANSI_FLAG_FONT_9PX) and not (sauce_data.Flags & sauce_parser.ANSI_FLAG_FONT_8PX)
-			if (sauce_data.Flags & sauce_parser.ANSI_FLAG_LEGACY_ASPECT) and not (sauce_data.Flags & sauce_parser.ANSI_FLAG_SQUARE_ASPECT):
+			if sauce_data.Flags & sauce_parser.ANSI_FLAG_ICE_COLOR:
+				ice_color = true
+				blinking = false
+				blinking_enabled_at_start = false
+			else:
+				ice_color = false
+				blinking = true
+				blinking_enabled_at_start = true
+			font_8px = sauce_data.Flags & sauce_parser.ANSI_FLAG_FONT_8PX and not sauce_data.Flags & sauce_parser.ANSI_FLAG_FONT_9PX
+			font_9px = sauce_data.Flags & sauce_parser.ANSI_FLAG_FONT_9PX and not sauce_data.Flags & sauce_parser.ANSI_FLAG_FONT_8PX
+			if sauce_data.Flags & sauce_parser.ANSI_FLAG_LEGACY_ASPECT and not sauce_data.Flags & sauce_parser.ANSI_FLAG_SQUARE_ASPECT:
 				aspect_ratio = ASPECT_RATIO.LEGACY
-			if (sauce_data.Flags & sauce_parser.ANSI_FLAG_SQUARE_ASPECT) and not (sauce_data.Flags & sauce_parser.ANSI_FLAG_LEGACY_ASPECT):
+			if sauce_data.Flags & sauce_parser.ANSI_FLAG_SQUARE_ASPECT and not sauce_data.Flags & sauce_parser.ANSI_FLAG_LEGACY_ASPECT:
 				aspect_ratio = ASPECT_RATIO.SQUARE
 
 			# Extract width
@@ -273,6 +282,12 @@ func load_ansi_file(file_path:String) -> void:
 			ansi_height = sauce_data.TInfo2
 		else:
 			content_length = file.get_length()
+			blinking = true
+			blinking_enabled_at_start = true
+			ice_color = false
+			font_8px = true
+			font_9px = false
+			aspect_ratio = ASPECT_RATIO.SQUARE
 
 		var content:PackedByteArray
 		for i:int in range(content_length):
