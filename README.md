@@ -110,4 +110,4 @@ func print_ruler() -> void:
 
 
 
-Thanks again to Hueson for the idea to use TileMaps in general, and Selina for the guidance on best way to do it! ❤️
+Thanks again to Axel for the mentoring/peer reviews, Hueson for the idea to use TileMaps in general, and Selina for the guidance on best way to do it! ❤️
