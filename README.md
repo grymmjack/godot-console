@@ -1,4 +1,4 @@
-![GODOT-CONSOLE](https://github.com/user-attachments/assets/59b55103-8eca-4cd9-a4ae-510aa3072923)
+![GODOT-CONSOLE](https://raw.githubusercontent.com/grymmjack/godot-console/refs/heads/main/splash-trans.png)
 
 # Working CGA Godot Text Mode 16 color DOS console
 
