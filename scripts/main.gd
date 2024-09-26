@@ -25,7 +25,7 @@ func _ready() -> void:
 
 	# the below are just test files
 	#load_ansi_file("res://assets/ANSIs/gj-17_dec23.ans")
-	#load_ansi_file("res://assets/ANSIs/gj-22_dec23.ans")
+	load_ansi_file("res://assets/ANSIs/gj-22_dec23.ans")
 	#load_ansi_file("res://assets/ANSIs/gj-cgagris.ans")
 	#load_ansi_file("res://assets/ANSIs/gj-dwimmer.ans")
 	#load_ansi_file("res://assets/ANSIs/gj-kraftwerk.ans")
