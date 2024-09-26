@@ -7,8 +7,8 @@ class_name AnsiParser
 extends TextConsole
 
 var sauce_data:SauceParser.SauceData = null
-var ansi_width:int
-var ansi_height:int
+var ansi_width:int = 0
+var ansi_height:int = 0
 
 func parse_ansi(data:PackedByteArray) -> void:
 	# Process data
@@ -156,9 +156,9 @@ func process_sgr(params:Array[int]) -> void:
 func process_cursor_position(params) -> void:
 	var row = 1
 	var col = 1
-	if params.size() >= 1 and params[0] != '':
+	if params.size() >= 1 and params[0]:
 		row = params[0]
-	if params.size() >= 2 and params[1] != '':
+	if params.size() >= 2 and params[1]:
 		col = params[1]
 	locate(col, row)
 
@@ -208,7 +208,7 @@ func erase_line(params:Array) -> void:
 
 func clear_line(line_index:int) -> void:
 	for x in range(columns):
-		bg(Vector2i(x, line_index), background_color, blinking)
+		bg(Vector2i(x, line_index), background_color)
 		fg(Vector2i(x, line_index), foreground_color, cha_to_atlas_coord(" "), blinking)
 
 func reset_styles() -> void:
@@ -250,7 +250,7 @@ func swap_colors() -> void:
 	foreground_color = background_color
 	background_color = temp
 
-func load_ansi_file(file_path:String) -> void:
+func load_ansi_file(file_path:String, resize_display:bool = true, change_font:bool = true) -> void:
 	utf8_ans = ".utf8ans" in file_path
 	var sauce_parser = SauceParser.new()
 	var content_length:int = 0
@@ -272,11 +272,12 @@ func load_ansi_file(file_path:String) -> void:
 				blinking_enabled_at_start = true
 			font_8px = sauce_data.Flags & sauce_parser.ANSI_FLAG_FONT_8PX and not sauce_data.Flags & sauce_parser.ANSI_FLAG_FONT_9PX
 			font_9px = sauce_data.Flags & sauce_parser.ANSI_FLAG_FONT_9PX and not sauce_data.Flags & sauce_parser.ANSI_FLAG_FONT_8PX
-			if sauce_data.Flags & sauce_parser.ANSI_FLAG_LEGACY_ASPECT and not sauce_data.Flags & sauce_parser.ANSI_FLAG_SQUARE_ASPECT:
+			if sauce_data.Flags & sauce_parser.ANSI_FLAG_RATIO_BIT2 and not sauce_parser.ANSI_FLAG_RATIO_BIT1:
 				aspect_ratio = ASPECT_RATIO.LEGACY
-			if sauce_data.Flags & sauce_parser.ANSI_FLAG_SQUARE_ASPECT and not sauce_data.Flags & sauce_parser.ANSI_FLAG_LEGACY_ASPECT:
+			else:
 				aspect_ratio = ASPECT_RATIO.SQUARE
-
+			# Extract font
+			font_used = sauce_data.TInfoS
 			# Extract width
 			ansi_width = sauce_data.TInfo1
 			ansi_height = sauce_data.TInfo2
@@ -285,6 +286,7 @@ func load_ansi_file(file_path:String) -> void:
 			blinking = true
 			blinking_enabled_at_start = true
 			ice_color = false
+			font_used = "IBM VGA"
 			font_8px = true
 			font_9px = false
 			aspect_ratio = ASPECT_RATIO.SQUARE
@@ -293,6 +295,27 @@ func load_ansi_file(file_path:String) -> void:
 		for i:int in range(content_length):
 			content.append(file.get_8())
 		file.close()
+
+		if resize_display:
+			if columns < 80: # reset to 80 columns first
+				columns = 80
+			if font_8px or font_9px: # reset to 25 rows first...
+				if rows < 25: rows = 25
+			if font_used == "IBM VGA50": # reset to 50 rows if 8x8 font
+				if rows < 50: rows = 50
+			if ansi_width > 0 and ansi_height > 0: # then if ansi w/h from sauce avail. use instead
+				columns = ansi_width
+				rows = ansi_height
+			setup_window(scale)
+		if change_font:
+			if font_used == "IBM VGA50":
+				setup_screen_mode(SCREEN_MODE.FONT_8x8)
+			else:
+				if font_8px:
+					setup_screen_mode(SCREEN_MODE.FONT_8x16)
+				else:
+					setup_screen_mode(SCREEN_MODE.FONT_9x16)
+		cls()
 		parse_ansi(content)
 	else:
 		print("Failed to open file: %s" % file_path)

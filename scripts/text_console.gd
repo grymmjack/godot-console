@@ -41,14 +41,16 @@ enum SCREEN_MODE { FONT_8x8, FONT_8x16, FONT_9x16 }
 @export var background:TileMapLayer
 @export var foreground:TileMapLayer
 
+@export_storage var bold:bool = false
+@export_storage var blinking:bool = false
+@export_storage var inverted:bool = false
+@export_storage var ice_color:bool = false
+@export_storage var font_9px:bool = false
+@export_storage var font_8px:bool = false
+@export_storage var utf8_ans:bool = false
+@export_storage var font_used:String
+
 var _scrollback_buffer:Array[TextChar]
-var bold:bool = false
-var blinking:bool = false
-var inverted:bool = false
-var ice_color:bool = false
-var font_9px:bool = false
-var font_8px:bool = false
-var utf8_ans:bool = false
 
 enum VERTICAL_DIRECTION { DOWN, UP }
 enum HORIZONTAL_DIRECTION { LEFT, RIGHT }
@@ -221,11 +223,20 @@ func setup_window(_scale:int) -> void:
 	scale = _scale
 	if !is_inside_tree():
 		return
-	get_window().size = Vector2i(character_width * columns, character_height * rows) * scale
-	get_window().content_scale_aspect = Window.CONTENT_SCALE_ASPECT_KEEP
+	var adjusted_char_height:float
+	if aspect_ratio == ASPECT_RATIO.LEGACY:
+		adjusted_char_height = character_height * 1.35
+	else:
+		adjusted_char_height = character_height
 	get_window().content_scale_factor = scale
 	get_window().content_scale_mode = Window.CONTENT_SCALE_MODE_VIEWPORT
-	get_window().content_scale_size = Vector2i(character_width * columns, character_height * rows) * scale
+	get_window().content_scale_aspect = Window.CONTENT_SCALE_ASPECT_IGNORE
+	if font_9px:
+		get_window().size = Vector2i(character_width * columns + columns, character_height * rows) * scale
+		get_window().content_scale_size = Vector2i(character_width * columns + columns, adjusted_char_height * rows) * scale
+	else:
+		get_window().size = Vector2i(character_width * columns, character_height * rows) * scale
+		get_window().content_scale_size = Vector2i(character_width * columns, adjusted_char_height * rows) * scale
 
 func setup_screen_mode(mode:int) -> void:
 	screen_mode = mode
@@ -237,6 +248,9 @@ func setup_screen_mode(mode:int) -> void:
 	%FG_8x8.hide()
 	%FG_8x16.hide()
 	%FG_9x16.hide()
+	if aspect_ratio == ASPECT_RATIO.LEGACY:
+		if font_used == "IBM VGA":
+			mode = SCREEN_MODE.FONT_9x16
 	match mode:
 		SCREEN_MODE.FONT_8x8:
 			%BG_8x8.show()
@@ -253,14 +267,13 @@ func setup_screen_mode(mode:int) -> void:
 			%FG_9x16.show()
 			character_width = 9
 			character_height = 16
-	setup_window(scale)
 
 # clear screen
 func cls() -> void:
 	is_clearing.emit()
 	for y in range(rows):
 		for x in range(columns):
-			bg(Vector2i(x, y), background_color, blinking)
+			bg(Vector2i(x, y), background_color)
 	_set_cursor_position(Vector2i(0, 0))
 	finished_clearing.emit()
 
@@ -313,7 +326,7 @@ func echo(_str:String) -> void:
 	for i in len(_str):
 		var cha:String = _str[i]
 		var tile:Vector2i = cha_to_atlas_coord(cha)
-		bg(Vector2i(cursor_position.x, cursor_position.y), background_color, blinking)
+		bg(Vector2i(cursor_position.x, cursor_position.y), background_color)
 		fg(Vector2i(cursor_position.x, cursor_position.y), foreground_color, tile, blinking)
 		var new_x:int = cursor_position.x + 1
 		var new_y:int = cursor_position.y
@@ -325,32 +338,32 @@ func cecho(_str:String, fg_color:int, bg_color:int) -> void:
 	for i in len(_str):
 		var cha:String = _str[i]
 		var tile:Vector2i = cha_to_atlas_coord(cha)
-		bg(Vector2i(cursor_position.x, cursor_position.y), bg_color, blinking)
+		bg(Vector2i(cursor_position.x, cursor_position.y), bg_color)
 		fg(Vector2i(cursor_position.x, cursor_position.y), fg_color, tile, blinking)
 		var new_x:int = cursor_position.x + 1
 		var new_y:int = cursor_position.y
 		locate(new_x, new_y)
 
 # set background color using %BG tilemap layer
-func bg(_position:Vector2i, _color:int, blinking:bool = false) -> void:
+func bg(_position:Vector2i, _color:int) -> void:
 	color_changed.emit()
 	bg_color_changed.emit()
-	var source_id:int
-	#if blinking and blinking_enabled_at_start and not ice_color:
-		#source_id = BG_BLINKING_ATLAS_ID
+	#var source_id:int
+	#if blinking:
+		#source_id = 1
 	#else:
-	source_id = BG_ATLAS_ID
+	var source_id:int = 0
 	%BG_8x8.set_cell(_position, source_id, Vector2i(_color, 0))
 	%BG_8x16.set_cell(_position, source_id, Vector2i(_color, 0))
 	%BG_9x16.set_cell(_position, source_id, Vector2i(_color, 0))
 
 # set a foreground colored cell using %FG tilemap layer
-func fg(_position:Vector2i, _color:int, _tile:Vector2i, blinking:bool = false) -> void:
+func fg(_position:Vector2i, _color:int, _tile:Vector2i, _blinking:bool = false) -> void:
 	color_changed.emit()
 	fg_color_changed.emit()
 	var alternative_tile:int
 	var source_id:int
-	if blinking and blinking_enabled_at_start and not ice_color:
+	if _blinking and blinking_enabled_at_start and not ice_color:
 		alternative_tile = _color + CGA_PALETTE.size()
 		source_id = FG_BLINKING_ATLAS_ID
 	else:

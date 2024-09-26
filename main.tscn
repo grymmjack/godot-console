@@ -10,8 +10,6 @@
 
 [node name="SCREEN" type="Node" node_paths=PackedStringArray("background", "foreground")]
 script = ExtResource("4_exks7")
-rows = 100
-screen_mode = 2
 blinking_enabled_at_start = true
 background_color = 1
 background = NodePath("BG_9x16")
